@@ -37,12 +37,14 @@ print('Coefficients: \n', regr.coef_)
 # The mean square error
 print("Residual sum of squares: %.2f"
       % np.mean((regr.predict(diabetes_X_test) - diabetes_y_test) ** 2))
+
+print("Residual sum of squares: %.2f"
+      % np.mean((regr.predict(diabetes_X_test) - diabetes_y_test)))
 # Explained variance score: 1 is perfect prediction
 print('Variance score: %.2f' % regr.score(diabetes_X_test, diabetes_y_test))
 
-
-print diabetes_X_test
-print diabetes_y_test
+print (regr.predict(diabetes_X_test) - diabetes_y_test)
+print (regr.predict(diabetes_X_test) - diabetes_y_test) ** 2
 
 # Plot outputs
 plt.scatter(diabetes_X_test, diabetes_y_test,  color='black')
