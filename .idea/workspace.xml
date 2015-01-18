@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a41f5854-cef7-4704-a3cd-5ed8e7e48866" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Testing.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Testing.py" afterPath="$PROJECT_DIR$/Testing.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/load_data.py" afterPath="$PROJECT_DIR$/load_data.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plot_ols.py" afterPath="$PROJECT_DIR$/plot_ols.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="comp632_assignment1.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -29,11 +27,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="load_data.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="load_data.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/load_data.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.17827868" vertical-offset="498" max-vertical-offset="1665">
-              <caret line="39" column="63" selection-start-line="39" selection-start-column="63" selection-end-line="39" selection-end-column="63" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="360" max-vertical-offset="1770">
+              <caret line="44" column="0" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
               <folding>
                 <element signature="e#25#37#0" expanded="true" />
               </folding>
@@ -51,11 +49,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Testing.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Testing.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Testing.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="105" max-vertical-offset="630">
-              <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.41747573" vertical-offset="383" max-vertical-offset="855">
+              <caret line="37" column="53" selection-start-line="37" selection-start-column="53" selection-end-line="37" selection-end-column="53" />
               <folding>
                 <element signature="e#25#40#0" expanded="true" />
               </folding>
@@ -98,8 +96,8 @@
         <option value="$PROJECT_DIR$/poly.py" />
         <option value="$PROJECT_DIR$/plot_fitting.py" />
         <option value="$PROJECT_DIR$/plot_ols.py" />
-        <option value="$PROJECT_DIR$/Testing.py" />
         <option value="$PROJECT_DIR$/load_data.py" />
+        <option value="$PROJECT_DIR$/Testing.py" />
       </list>
     </option>
   </component>
@@ -192,7 +190,7 @@
       <console-settings />
     </option>
   </component>
-  <component name="RunManager" selected="Python.load_data">
+  <component name="RunManager" selected="Python tests.Unittest TestAssignment1.test_build_normalized_array">
     <configuration default="false" name="load_data" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -206,25 +204,6 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="comp632_assignment1" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/load_data.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <RunnerSettings RunnerId="PythonRunner" />
-      <ConfigurationWrapper RunnerId="PythonRunner" />
-      <method />
-    </configuration>
-    <configuration default="false" name="plot_ols" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="comp632_assignment1" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/plot_ols.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <RunnerSettings RunnerId="PythonRunner" />
@@ -287,6 +266,30 @@
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Testing.py" />
       <option name="CLASS_NAME" value="TestAssignment1" />
       <option name="METHOD_NAME" value="test_linear_regression" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_METHOD" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="PUREUNITTEST" value="true" />
+      <option name="PARAMS" value="" />
+      <option name="USE_PARAM" value="false" />
+      <RunnerSettings RunnerId="PythonRunner" />
+      <ConfigurationWrapper RunnerId="PythonRunner" />
+      <method />
+    </configuration>
+    <configuration default="false" name="Unittest TestAssignment1.test_build_normalized_array" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="comp632_assignment1" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Testing.py" />
+      <option name="CLASS_NAME" value="TestAssignment1" />
+      <option name="METHOD_NAME" value="test_build_normalized_array" />
       <option name="FOLDER_NAME" value="" />
       <option name="TEST_TYPE" value="TEST_METHOD" />
       <option name="PATTERN" value="" />
@@ -422,18 +425,18 @@
     </configuration>
     <list size="5">
       <item index="0" class="java.lang.String" itemvalue="Python.load_data" />
-      <item index="1" class="java.lang.String" itemvalue="Python.plot_ols" />
-      <item index="2" class="java.lang.String" itemvalue="Python.Testing" />
-      <item index="3" class="java.lang.String" itemvalue="Python tests.Unittests in Testing" />
-      <item index="4" class="java.lang.String" itemvalue="Python tests.Unittest TestAssignment1.test_linear_regression" />
+      <item index="1" class="java.lang.String" itemvalue="Python.Testing" />
+      <item index="2" class="java.lang.String" itemvalue="Python tests.Unittests in Testing" />
+      <item index="3" class="java.lang.String" itemvalue="Python tests.Unittest TestAssignment1.test_linear_regression" />
+      <item index="4" class="java.lang.String" itemvalue="Python tests.Unittest TestAssignment1.test_build_normalized_array" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.load_data" />
-        <item index="1" class="java.lang.String" itemvalue="Python tests.Unittest TestAssignment1.test_linear_regression" />
-        <item index="2" class="java.lang.String" itemvalue="Python tests.Unittests in Testing" />
-        <item index="3" class="java.lang.String" itemvalue="Python.Testing" />
-        <item index="4" class="java.lang.String" itemvalue="Python.plot_ols" />
+        <item index="0" class="java.lang.String" itemvalue="Python tests.Unittest TestAssignment1.test_build_normalized_array" />
+        <item index="1" class="java.lang.String" itemvalue="Python.load_data" />
+        <item index="2" class="java.lang.String" itemvalue="Python tests.Unittest TestAssignment1.test_linear_regression" />
+        <item index="3" class="java.lang.String" itemvalue="Python tests.Unittests in Testing" />
+        <item index="4" class="java.lang.String" itemvalue="Python.Testing" />
       </list>
     </recent_temporary>
   </component>
@@ -462,7 +465,7 @@
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18384568" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.44288793" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.5247845" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -638,16 +641,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Testing.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="630">
-          <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
-          <folding>
-            <element signature="e#25#40#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/hw1x.dat">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1590">
@@ -658,10 +651,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/load_data.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.17827868" vertical-offset="498" max-vertical-offset="1665">
-          <caret line="39" column="63" selection-start-line="39" selection-start-column="63" selection-end-line="39" selection-end-column="63" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="360" max-vertical-offset="1770">
+          <caret line="44" column="0" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
           <folding>
             <element signature="e#25#37#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Testing.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.41747573" vertical-offset="383" max-vertical-offset="855">
+          <caret line="37" column="53" selection-start-line="37" selection-start-column="53" selection-end-line="37" selection-end-column="53" />
+          <folding>
+            <element signature="e#25#40#0" expanded="true" />
           </folding>
         </state>
       </provider>

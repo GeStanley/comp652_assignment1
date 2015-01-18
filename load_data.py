@@ -28,18 +28,25 @@ def FeatureNormalization(feature_array, target_array):
 
     weights[0] = LinearRegression(feature_array, target_array)
 
-    max_index = feature_array.argmax(axis=0)
-    normalized_feature_array = numpy.empty((feature_array.shape[0], 0), dtype=float)
-
-    for i in range(0, array_shape[1]):
-
-        normalized_vector = feature_array[:, i] / feature_array[max_index[i], i]
-
-        normalized_feature_array = numpy.append(normalized_feature_array, normalized_vector[:, numpy.newaxis], axis=1)
+    normalized_feature_array = BuildNormalizedArray(feature_array)
 
     weights[1] = LinearRegression(normalized_feature_array, target_array)
 
     return weights
+
+def BuildNormalizedArray(original_array):
+
+    max_index = original_array.argmax(axis=0)
+    normalized_array = numpy.empty((original_array.shape[0], 0), dtype=float)
+
+    for i in range(0, original_array.shape[1]):
+
+        normalized_vector = original_array[:, i] / original_array[max_index[i], i]
+
+        normalized_array = numpy.append(normalized_array, normalized_vector[:, numpy.newaxis], axis=1)
+
+    return normalized_array
+
 
 def PolyRegress():
 

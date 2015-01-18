@@ -20,15 +20,30 @@ class TestAssignment1(unittest.TestCase):
                                [0.03, 0.17, 1]])
 
 
-        print dataset.shape
-        print dataset
-
         target = numpy.array([2.49, 0.83, -0.25, 3.10, 0.87, 0.02, -0.12, 1.81, -0.83, 0.43])
 
 
         result = load_data.LinearRegression(dataset, target)
 
         expected_result = numpy.array([0.67, 1.74, 0.73])
+
+        self.assertTrue(numpy.allclose(result, expected_result, rtol=1e-01, atol=1e-01))
+
+    def test_build_normalized_array(self):
+
+        dataset = numpy.array([[2, 5],
+                                [4, 10],
+                                [1, 8],
+                                [10, 7],
+                                [8, 5]], dtype=float)
+
+        result = load_data.BuildNormalizedArray(dataset)
+
+        expected_result = numpy.array([[0.2, 0.5],
+                                [0.4, 1],
+                                [0.1, 0.8],
+                                [1, 0.7],
+                                [0.8, 0.5]])
 
         self.assertTrue(numpy.allclose(result, expected_result, rtol=1e-01, atol=1e-01))
 
