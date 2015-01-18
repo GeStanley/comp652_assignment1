@@ -31,9 +31,6 @@ for i in range(len(degrees)):
 
     X_test = np.linspace(0, 1, 100)
 
-    print X_test.shape
-    print X[:, np.newaxis].shape
-
     plt.plot(X_test, pipeline.predict(X_test[:, np.newaxis]), label="Model")
     plt.plot(X_test, true_fun(X_test), label="True function")
     plt.scatter(X, y, label="Samples")

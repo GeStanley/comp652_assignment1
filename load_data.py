@@ -34,23 +34,37 @@ array_x = numpy.append(array_x, array_ones, axis=1)
 # print vector_y.shape
 # print type(vector_y)
 
-poly = PolynomialFeatures(degree=2)
+# poly = PolynomialFeatures(degree=2)
+#
+#
+# model = Pipeline([('poly', poly),
+#                 ('linear', regression)])
 
-model = Pipeline([('poly', poly),
-                ('linear', LinearRegression())])
+plt.figure(figsize=(14, 4))
 
+for i in range(0, 3):
+    ax = plt.subplot(1, 3, i+1)
+    plt.setp(ax)
 
+    regression = LinearRegression()
 
+    regression.fit(array_x[:, i, numpy.newaxis], vector_y[:, numpy.newaxis])
 
-model.fit(array_x[:, 1, numpy.newaxis], vector_y[:, numpy.newaxis])
+    # Plot outputs
+    plt.scatter(array_x[:, i], vector_y[:, numpy.newaxis],  color='black')
 
+    print array_x[:, i]
+    print vector_y[:, numpy.newaxis]
 
-# Plot outputs
-plt.scatter(array_x[:, 1], vector_y[:, numpy.newaxis],  color='black')
+    sorted_x = numpy.sort(array_x[:, i, numpy.newaxis], axis=0)
 
-sorted = numpy.sort(array_x[:, 1, numpy.newaxis], axis=0)
+    plt.plot(sorted_x, regression.predict(sorted_x), color='blue', linewidth=3)
 
-plt.plot(sorted, model.predict(sorted), color='blue', linewidth=3)
+    min_x = min(sorted_x) - 1
+    max_x = max(sorted_x) + 1
+
+    plt.axis([min_x, max_x, -20, 140])
+    plt.title("Feature %d" % i)
 
 # plt.xticks(())
 # plt.yticks(())
