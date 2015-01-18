@@ -6,6 +6,20 @@ from sklearn.preprocessing import PolynomialFeatures
 from sklearn.linear_model import LinearRegression
 from sklearn.pipeline import Pipeline
 
+
+def FeatureNormalization():
+
+    return 0
+
+def PolyRegress():
+
+    return 0
+
+def FiveFoldCrossValidation():
+
+    return 0
+
+
 array_x = numpy.loadtxt('hw1x.dat', float)
 vector_y = numpy.loadtxt('hw1y.dat', float)
 
@@ -34,11 +48,7 @@ model.fit(array_x[:, 1, numpy.newaxis], vector_y[:, numpy.newaxis])
 # Plot outputs
 plt.scatter(array_x[:, 1], vector_y[:, numpy.newaxis],  color='black')
 
-print array_x[:, 1, numpy.newaxis]
-print model.predict(array_x[:, 1, numpy.newaxis])
-
 sorted = numpy.sort(array_x[:, 1, numpy.newaxis], axis=0)
-print sorted
 
 plt.plot(sorted, model.predict(sorted), color='blue', linewidth=3)
 
