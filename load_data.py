@@ -36,12 +36,14 @@ def FeatureNormalization(feature_array, target_array):
 
 def BuildNormalizedArray(original_array):
 
-    max_index = original_array.argmax(axis=0)
+    absolute_array = numpy.absolute(original_array)
+    max_index = absolute_array.argmax(axis=0)
+
     normalized_array = numpy.empty((original_array.shape[0], 0), dtype=float)
 
     for i in range(0, original_array.shape[1]):
 
-        normalized_vector = original_array[:, i] / original_array[max_index[i], i]
+        normalized_vector = original_array[:, i] / absolute_array[max_index[i], i]
 
         normalized_array = numpy.append(normalized_array, normalized_vector[:, numpy.newaxis], axis=1)
 
@@ -51,6 +53,23 @@ def BuildNormalizedArray(original_array):
 def PolyRegress():
 
     return 0
+
+def BuildPolynomialArray(original_array, degree):
+
+    polynomial_array = numpy.empty((original_array.shape[0], 0), dtype=float)
+
+    for d in range (degree, 0, -1):
+        #assumes a right most vector containing all 1s
+        for j in range (0, original_array.shape[1] - 1):
+
+            polynomial_vector = original_array[:, j] ** d
+            polynomial_array = numpy.append(polynomial_array, polynomial_vector[:, numpy.newaxis], axis=1)
+
+
+    array_ones = numpy.ones((polynomial_array[:, 0].size, 1))
+    polynomial_array = numpy.append(polynomial_array, array_ones, axis=1)
+
+    return polynomial_array
 
 def FiveFoldCrossValidation():
 
@@ -67,19 +86,19 @@ array_ones = numpy.ones((array_x[:, 0].size, 1))
 array_x = numpy.append(array_x, array_ones, axis=1)
 
 print FeatureNormalization(array_x, vector_y)
+
+#matrix_x = numpy.matrix(array_x)
+
+# print array_x[:, 0].shape
+# print type(array_x[:, 0])
+# print vector_y.shape
+# print type(vector_y)
+
+# poly = PolynomialFeatures(degree=2)
 #
-# #matrix_x = numpy.matrix(array_x)
 #
-# # print array_x[:, 0].shape
-# # print type(array_x[:, 0])
-# # print vector_y.shape
-# # print type(vector_y)
-#
-# # poly = PolynomialFeatures(degree=2)
-# #
-# #
-# # model = Pipeline([('poly', poly),
-# #                 ('linear', regression)])
+# model = Pipeline([('poly', poly),
+#                 ('linear', regression)])
 #
 # plt.figure(figsize=(14, 4))
 #
