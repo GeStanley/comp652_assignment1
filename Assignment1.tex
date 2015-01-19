@@ -71,7 +71,19 @@
 \maketitle
 \section*{Question 1}
 \section*{Question 2}
+When simplifying the maximum likelihood equation for a regression whose variables
+maintain a constant normal distribution we are able to obtain the sum-squared-error
+function. However, when the standard deviation a varies from one variable to another
+this simplification is no longer achievable.
   \begin{equation}
-     L(w) = \prod_{i=1}^{m} \frac{1}{\sqrt{2\pi\sigma}}e^-\frac{1}{2}\left(\frac{y-h(x)}{\sigma}\right)^2
+     L(w) = \prod_{i=1}^{m} \frac{1}{\sqrt{2\pi\sigma_i^2}}e^-\frac{1}{2}\left(\frac{y_i-h_w(x_i)}{\sigma_i}\right)^2
   \end{equation}
+  \begin{equation}
+     \log L(w) = -\frac{1}{2}n \log(2\pi) - n \sum_{i=1}^{m} \log \sigma_i - \sum_{i=1}^{m} \left(\frac{(y_i-h_w(x_i))^2}{2\sigma_i^2}\right)
+  \end{equation}
+Similarly to when dealing with a constant distribution the maximization problem
+becomes one of minimizing the following equation.
+\begin{equation}
+     n \sum_{i=1}^{m} \log \sigma_i + \sum_{i=1}^{m} \left(\frac{(y_i-h_w(x_i))^2}{2\sigma_i^2}\right)
+\end{equation}
 \end{document}

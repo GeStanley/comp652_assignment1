@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2015.1.16)  19 JAN 2015 12:03
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2015.1.16)  19 JAN 2015 12:44
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -659,7 +659,7 @@ AED: lastpage setting LastPage
 Here is how much of TeX's memory you used:
  14566 strings out of 493109
  274957 string characters out of 6135010
- 351619 words of memory out of 5000000
+ 353619 words of memory out of 5000000
  17703 multiletter control sequences out of 15000+600000
  13151 words of font info for 50 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -675,7 +675,7 @@ cm/cmr9.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/
 cmsy10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/c
 msy7.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmt
 i12.pfb>
-Output written on Assignment1.pdf (2 pages, 97621 bytes).
+Output written on Assignment1.pdf (2 pages, 103038 bytes).
 PDF statistics:
  54 PDF objects out of 1000 (max. 8388607)
  39 compressed objects within 1 object stream
