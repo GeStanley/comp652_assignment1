@@ -1,42 +1,113 @@
 __author__ = 'geoffrey'
 
 import numpy
-import pylab
-from sklearn import linear_model
+import matplotlib.pyplot as plt
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.linear_model import LinearRegression
+from sklearn.pipeline import Pipeline
+
+def LinearRegression(feature_array, target_array):
+
+    feature_array_transposed = feature_array.transpose()
+
+    dot_product = numpy.dot(feature_array_transposed, feature_array)
+
+    inverse = numpy.linalg.inv(dot_product)
+
+    dot_product = numpy.dot(feature_array_transposed, target_array)
+
+    weights = numpy.dot(inverse, dot_product)
+
+    return weights
+
+def FeatureNormalization(feature_array, target_array):
+
+    array_shape = feature_array.shape
+
+    weights = numpy.zeros((2, array_shape[1]))
+
+    weights[0] = LinearRegression(feature_array, target_array)
+
+    normalized_feature_array = BuildNormalizedArray(feature_array)
+
+    weights[1] = LinearRegression(normalized_feature_array, target_array)
+
+    return weights
+
+def BuildNormalizedArray(original_array):
+
+    max_index = original_array.argmax(axis=0)
+    normalized_array = numpy.empty((original_array.shape[0], 0), dtype=float)
+
+    for i in range(0, original_array.shape[1]):
+
+        normalized_vector = original_array[:, i] / original_array[max_index[i], i]
+
+        normalized_array = numpy.append(normalized_array, normalized_vector[:, numpy.newaxis], axis=1)
+
+    return normalized_array
+
 
 def PolyRegress():
-    return null
+
+    return 0
+
+def FiveFoldCrossValidation():
+
+    return 0
 
 
-def LinearRegressionWithNormalization(x_matrix, y_vector):
-    regr = linear_model.LinearRegression()
-
-    regr.fit(x_matrix, y_vector)
-
-    print regr.coef_
-
-    pylab.scatter(x_matrix[:, 0], x_matrix[:, 1], c=y_vector)
-    pylab.show()
-
-    max_col0 = max(x_matrix[:, 0])
-    max_col1 = max(x_matrix[:, 1])
-
-    normalized = numpy.c_[x_matrix[:, 0] / max_col0, x_matrix[:, 1] / max_col1]
 
 
-    pylab.scatter(normalized[:, 0], normalized[:, 1], c=y_vector)
-    pylab.show()
+array_x = numpy.loadtxt('hw1x.dat', float)
+vector_y = numpy.loadtxt('hw1y.dat', float)
 
+array_ones = numpy.ones((array_x[:, 0].size, 1))
 
-    #pylab.scatter()
+array_x = numpy.append(array_x, array_ones, axis=1)
 
-#load the data files
-my_array_x = numpy.loadtxt('hw2x.dat', float)
-my_array_y = numpy.loadtxt('hw2y.dat', float)
-
-#convert numpy.darray into a matrix
-my_matrix_x = numpy.matrix(my_array_x)
-#add one to the last column of the x matrix
-my_matrix_x = numpy.c_[my_matrix_x, numpy.ones(my_matrix_x[:, 0].size)]
-
-LinearRegressionWithNormalization(my_matrix_x, my_array_y)
+print FeatureNormalization(array_x, vector_y)
+#
+# #matrix_x = numpy.matrix(array_x)
+#
+# # print array_x[:, 0].shape
+# # print type(array_x[:, 0])
+# # print vector_y.shape
+# # print type(vector_y)
+#
+# # poly = PolynomialFeatures(degree=2)
+# #
+# #
+# # model = Pipeline([('poly', poly),
+# #                 ('linear', regression)])
+#
+# plt.figure(figsize=(14, 4))
+#
+# for i in range(0, 3):
+#     ax = plt.subplot(1, 3, i+1)
+#     plt.setp(ax)
+#
+#     regression = LinearRegression()
+#
+#     regression.fit(array_x[:, i, numpy.newaxis], vector_y[:, numpy.newaxis])
+#
+#     # Plot outputs
+#     plt.scatter(array_x[:, i], vector_y[:, numpy.newaxis],  color='black')
+#
+#     print array_x[:, i]
+#     print vector_y[:, numpy.newaxis]
+#
+#     sorted_x = numpy.sort(array_x[:, i, numpy.newaxis], axis=0)
+#
+#     plt.plot(sorted_x, regression.predict(sorted_x), color='blue', linewidth=3)
+#
+#     min_x = min(sorted_x) - 1
+#     max_x = max(sorted_x) + 1
+#
+#     plt.axis([min_x, max_x, -20, 140])
+#     plt.title("Feature %d" % i)
+#
+# # plt.xticks(())
+# # plt.yticks(())
+#
+# plt.show()
