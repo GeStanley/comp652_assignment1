@@ -1,0 +1,77 @@
+\documentclass{report}
+% Change "article" to "report" to get rid of page number on title page
+\usepackage{amsmath,amsfonts,amsthm,amssymb}
+\usepackage{setspace}
+\usepackage{Tabbing}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{extramarks}
+\usepackage{chngpage}
+\usepackage{soul,color}
+\usepackage{listings}
+\usepackage{enumerate}
+\usepackage{graphicx,float,wrapfig}
+\usepackage{pifont}
+\usepackage{graphicx}
+\usepackage[english]{babel}
+\usepackage{tikz}
+% In case you need to adjust margins:
+\topmargin=-0.45in      %
+\evensidemargin=0in     %
+\oddsidemargin=0in      %
+\textwidth=6.5in        %
+\textheight=9.0in       %
+\headsep=0.25in         %
+
+\title{Assignment 1 - Comp 632 - Machine Learning}
+
+% Homework Specific Information
+\newcommand{\hmwkTitle}{Assignment 1}                     % Adjust this
+\newcommand{\hmwkDueDate}{Tuesday, January 27 2015}                           % Adjust this
+\newcommand{\hmwkClass}{COMP 632}
+
+
+\newcommand{\hmwkClassInstructor}{Dr. Doina Precup}
+\newcommand{\hmwkAuthorName}{Geoffrey Stanley}
+\newcommand{\hmwkAuthorNumber}{260645907}
+\newcommand{\Pp}{\mathbb{P}}
+\newcommand{\Ev}{\mathbb{E}}
+\newcommand{\cov}{\text{Cov}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\dd}{\, \mathrm{d}}
+
+% Setup the header and footer
+\pagestyle{fancy}                                                       %
+\lhead{\hmwkAuthorName}                              %
+\chead{}
+\rhead{\hmwkClass: \hmwkTitle}                                          %
+
+\lfoot{}
+\cfoot{}                                                                %
+\rfoot{Page\ \thepage\ of\ \pageref{LastPage}}                          %
+\renewcommand\headrulewidth{0.4pt}                                      %
+\renewcommand\footrulewidth{0.4pt}                                      %
+
+% This is used to trace down (pin point) problems
+% in latexing a document:
+%\tracingall
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\lstset{commentstyle=\color{mygreen}, frame=single,  language=R, showspaces=false, showstringspaces=false}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Make title
+\title{\vspace{2in}\textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\\normalsize\vspace{0.1in}\small{Due\ on\ \hmwkDueDate}\\\vspace{0.1in}\large{\textit{Presented to \hmwkClassInstructor}}\vspace{3in}}
+\date{}
+\author{\textbf{\hmwkAuthorName}\\
+    \textbf{Student ID: \hmwkAuthorNumber}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\maketitle
+\section*{Question 1}
+\section*{Question 2}
+  \begin{equation}
+     L(w) = \prod_{i=1}^{m} \frac{1}{\sqrt{2\pi\sigma}}e^-\frac{1}{2}\left(\frac{y-h(x)}{\sigma}\right)^2
+  \end{equation}
+\end{document}

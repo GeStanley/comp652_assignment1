@@ -76,6 +76,19 @@ class TestAssignment1(unittest.TestCase):
 
         self.assertTrue(numpy.allclose(result, expected_result, rtol=1e-01, atol=1e-01))
 
+        dataset = numpy.array([[3, 0.86, 1],
+                       [2, 0.09, 1],
+                       [4, -0.85, 1]])
+
+
+        result = load_data.BuildPolynomialArray(dataset, 2)
+
+        expected_result = numpy.array([[9, 0.75, 3, 0.86, 1],
+                               [4, 0.01, 2, 0.09, 1],
+                               [16, 0.73, 4, -0.85, 1]])
+
+        self.assertTrue(numpy.allclose(result, expected_result, rtol=1e-01, atol=1e-01))
+
 
 suite = unittest.TestLoader().loadTestsFromTestCase(TestAssignment1)
 unittest.TextTestRunner(verbosity=2).run(suite)
