@@ -8,6 +8,11 @@ from sklearn.pipeline import Pipeline
 
 def LinearRegression(feature_array, target_array):
 
+    #add a noise column of ones to the feature matrix
+    array_ones = numpy.ones((feature_array[:, 0].size, 1))
+    feature_array = numpy.append(feature_array, array_ones, axis=1)
+
+    #perform the linear regression
     feature_array_transposed = feature_array.transpose()
 
     dot_product = numpy.dot(feature_array_transposed, feature_array)
@@ -24,7 +29,7 @@ def FeatureNormalization(feature_array, target_array):
 
     array_shape = feature_array.shape
 
-    weights = numpy.zeros((2, array_shape[1]))
+    weights = numpy.zeros((2, array_shape[1]+1))
 
     weights[0] = LinearRegression(feature_array, target_array)
 
@@ -50,28 +55,73 @@ def BuildNormalizedArray(original_array):
     return normalized_array
 
 
-def PolyRegress():
+def PolyRegress(feature_array, target_array, degree):
 
     return 0
+
 
 def BuildPolynomialArray(original_array, degree):
 
     polynomial_array = numpy.empty((original_array.shape[0], 0), dtype=float)
 
-    for d in range (degree, 0, -1):
-        #assumes a right most vector containing all 1s
-        for j in range (0, original_array.shape[1] - 1):
+    for d in range(degree, 0, -1):
 
-            polynomial_vector = original_array[:, j] ** d
-            polynomial_array = numpy.append(polynomial_array, polynomial_vector[:, numpy.newaxis], axis=1)
+        degree_array = numpy.empty((original_array.shape[0], 0), dtype=float)
 
+        for feature in range(0, original_array.shape[1]):
 
-    array_ones = numpy.ones((polynomial_array[:, 0].size, 1))
-    polynomial_array = numpy.append(polynomial_array, array_ones, axis=1)
+            exponents = original_array[:, feature] ** d
+
+            degree_array = numpy.append(degree_array, exponents[:, numpy.newaxis], axis=1)
+
+        polynomial_array = numpy.append(polynomial_array, degree_array, axis=1)
 
     return polynomial_array
 
-def FiveFoldCrossValidation():
+def CalculateError(feature_array, target_array, weights):
+
+    error = 0
+
+    for row in range(0, feature_array.shape[0]):
+
+        estimate = numpy.sum(feature_array[row] * weights, axis=1)
+
+        error = (estimate - target_array[row]) ** 2
+
+
+    return error
+
+def FiveFoldCrossValidation(feature_array, target_array):
+
+    complete_array = numpy.append(feature_array, target_array[:, numpy.newaxis], axis=1)
+
+    five_folds = numpy.array_split(complete_array, 5)
+
+    #go through the 5 training cases
+    for i in range(0, 5):
+
+        training_array = numpy.empty((0, complete_array.shape[1]), dtype=float)
+
+        #concatenate the 4 folds that are being used for training
+        for j in range(0, 5):
+            if i != j:
+                training_data = numpy.append(training_array, five_folds[j], axis=0)
+
+                training_features = training_data[:, 0:training_data.shape[1]-1]
+                training_target = training_data[:, training_data.shape[1]-1]
+
+
+        weights = LinearRegression(training_features, training_target[:, numpy.newaxis])
+
+        # training_error = CalculateError(training_features, training_target[:, numpy.newaxis], weights)
+        #
+        # testing_features = training_data[:, 0:five_folds[i].shape[1]-1]
+        # testing_target = training_data[:, five_folds[i].shape[1]-1]
+        #
+        # testing_error = CalculateError(testing_features, testing_target, weights)
+
+
+
 
     return 0
 
@@ -81,9 +131,7 @@ def FiveFoldCrossValidation():
 array_x = numpy.loadtxt('hw1x.dat', float)
 vector_y = numpy.loadtxt('hw1y.dat', float)
 
-array_ones = numpy.ones((array_x[:, 0].size, 1))
-
-array_x = numpy.append(array_x, array_ones, axis=1)
+FiveFoldCrossValidation(array_x, vector_y)
 
 print FeatureNormalization(array_x, vector_y)
 
