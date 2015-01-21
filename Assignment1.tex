@@ -70,20 +70,111 @@
 \begin{document}
 \maketitle
 \section*{Question 1}
+\subsection*{A)}
+See source code.
+\subsection*{B)}
+\begin{equation}
+  w = \begin{pmatrix}
+        0.88485161 & 11.02552359 & -9.35666242
+      \end{pmatrix}
+\end{equation}
+\begin{equation}
+  w_{normalized} = \begin{pmatrix}
+                    7.07067572 & 84.7476132 & -9.35666242
+                    \end{pmatrix}
+\end{equation}
+\subsection*{C)}
+See source code.
+\subsection*{D)}
+\subsection*{E)}
+Fold \#1 results are:\\
+Training error is : [ 17633.45681241]\\
+Testing error is : [ 4795.16430455]\\
+Fold \#2 results are:\\
+Training error is : [ 16317.25933808]\\
+Testing error is : [ 6362.29874466]\\
+Fold \#3 results are:\\
+Training error is : [ 15395.564805]\\
+Testing error is : [ 7339.05242593]\\
+Fold \#4 results are:\\
+Training error is : [ 18457.0083633]\\
+Testing error is : [ 3879.4511839]\\
+Fold \#5 results are:\\
+Training error is : [ 20136.42642011]\\
+Testing error is : [ 2188.4234707]\\
+\subsection*{F)}
+
 \section*{Question 2}
 When simplifying the maximum likelihood equation for a regression whose variables
 maintain a constant normal distribution we are able to obtain the sum-squared-error
 function. However, when the standard deviation a varies from one variable to another
 this simplification is no longer achievable.
   \begin{equation}
-     L(w) = \prod_{i=1}^{m} \frac{1}{\sqrt{2\pi\sigma_i^2}}e^-\frac{1}{2}\left(\frac{y_i-h_w(x_i)}{\sigma_i}\right)^2
+     L(w) = \prod_{i=1}^{m} \frac{1}{\sqrt{2\pi\sigma_i^2}}e ^ {-\frac{1}{2}\left(\frac{y_i-h_w(x_i)}{\sigma_i}\right)^2}
   \end{equation}
+
   \begin{equation}
-     \log L(w) = -\frac{1}{2}n \log(2\pi) - n \sum_{i=1}^{m} \log \sigma_i - \sum_{i=1}^{m} \left(\frac{(y_i-h_w(x_i))^2}{2\sigma_i^2}\right)
+     L(w) = \sum_{i=1}^{m} \log \left(\frac{1}{\sqrt{2\pi\sigma_i^2}}\right) - \sum_{i=1}^{m} \frac{1}{2}\left(\frac{y_i-h_w(x_i)}{\sigma_i}\right)^2
   \end{equation}
-Similarly to when dealing with a constant distribution the maximization problem
-becomes one of minimizing the following equation.
+
+  \begin{equation}
+     L(w) = \sum_{i=1}^{m} \log \left((2\pi)^{-1/2}\sigma_i^{-1}\right) - \sum_{i=1}^{m} \frac{1}{2}\left(\frac{y_i-h_w(x_i)}{\sigma_i}\right)^2
+  \end{equation}
+
+  \begin{equation}
+     \log L(w) = -\frac{1}{2} \log(2\pi) - \sum_{i=1}^{m} \log \sigma_i - \sum_{i=1}^{m} \left(\frac{(y_i-h_w(x_i))^2}{2\sigma_i^2}\right)
+  \end{equation}
+
 \begin{equation}
-     n \sum_{i=1}^{m} \log \sigma_i + \sum_{i=1}^{m} \left(\frac{(y_i-h_w(x_i))^2}{2\sigma_i^2}\right)
+     \frac{\partial}{\partial w_j} \log L(w) = \frac{\partial}{\partial w_j} \left(-\frac{1}{2} \log(2\pi) - \sum_{i=1}^{m} \log \sigma_i - \sum_{i=1}^{m} \left(\frac{(y_i-h_w(x_i))^2}{2\sigma_i^2}\right)\right)
 \end{equation}
+\begin{equation}
+     w^* = (X\Omega^{-1} X)^{-1} X\Omega^{-1} Y
+\end{equation}
+
+
+\section*{Question 3}
+\begin{equation}
+  L_H(w, \delta) = \left\{
+  \begin{array}{l l}
+    (y_i - w^Tx_i)^2 / 2 & \quad \text{if }  | y_i - w^Tx_i | \leq \delta\\
+    \delta | y_i - w^Tx_i | - \delta^2 / 2 & \quad \text{otherwise}
+
+  \end{array} \right.\end{equation}
+\subsection*{A)}
+\begin{equation}
+  \frac{\partial}{\partial w} L_H(w, \delta) = \left\{
+  \begin{array}{l l}
+    \frac{\partial}{\partial w} \left((y_i - w^Tx_i)^2 / 2 \right)& \quad \text{if }  | y_i - w^Tx_i | \leq \delta\\
+    \frac{\partial}{\partial w} \left(\delta | y_i - w^Tx_i | - \delta^2 / 2\right) & \quad \text{otherwise}
+
+  \end{array} \right.\end{equation}
+
+\begin{equation}
+  \frac{\partial}{\partial w} L_H(w, \delta) = \left\{
+  \begin{array}{l l}
+    (y_i - w^Tx_i) x_i^T & \quad \text{if }  | y_i - w^Tx_i | \leq \delta\\
+    \delta \frac{x_i^T}{| y_i - w^Tx_i |} & \quad \text{otherwise}
+
+  \end{array} \right.\end{equation}
+\subsection*{B)}
+\subsection*{C)}
+
+
+\section*{Question 4}
+  \begin{equation}
+    h_{w1,...wk}(x) = \prod_{k=1}^{K}e^{w_k^Tx}
+  \end{equation}
+
+  \begin{equation}
+    \log h_{w1,...wk}(x) = \sum_{k=1}^{K} w_k^Tx
+  \end{equation}
+
+  \begin{equation}
+    \frac{\partial}{\partial w} \log h_{w1,...wk}(x) = \frac{\partial}{\partial w} \left(\sum_{k=1}^{K} w_k^Tx\right)
+  \end{equation}
+
+  \begin{equation}
+    \frac{\partial}{\partial w} \log h_{w1,...wk}(x) = \sum_{k=1}^{K} x^T
+  \end{equation}
 \end{document}
