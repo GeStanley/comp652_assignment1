@@ -114,22 +114,55 @@ this simplification is no longer achievable.
   \end{equation}
 
   \begin{equation}
-     L(w) = \sum_{i=1}^{m} \log \left(\frac{1}{\sqrt{2\pi\sigma_i^2}}\right) - \sum_{i=1}^{m} \frac{1}{2}\left(\frac{y_i-h_w(x_i)}{\sigma_i}\right)^2
+     \log L(w) = \sum_{i=1}^{m} \log \left(\frac{1}{\sqrt{2\pi\sigma_i^2}}\right)
+     - \sum_{i=1}^{m} \frac{1}{2}\left(\frac{y_i-h_w(x_i)}{\sigma_i}\right)^2
   \end{equation}
 
   \begin{equation}
-     L(w) = \sum_{i=1}^{m} \log \left((2\pi)^{-1/2}\sigma_i^{-1}\right) - \sum_{i=1}^{m} \frac{1}{2}\left(\frac{y_i-h_w(x_i)}{\sigma_i}\right)^2
+     \log L(w) = \sum_{i=1}^{m} \log \left((2\pi)^{-1/2}\sigma_i^{-1}\right)
+     - \sum_{i=1}^{m} \frac{1}{2}\left(\frac{y_i-h_w(x_i)}{\sigma_i}\right)^2
   \end{equation}
 
   \begin{equation}
-     \log L(w) = -\frac{1}{2} \log(2\pi) - \sum_{i=1}^{m} \log \sigma_i - \sum_{i=1}^{m} \left(\frac{(y_i-h_w(x_i))^2}{2\sigma_i^2}\right)
+     \log L(w) = -\frac{1}{2} \log(2\pi)
+     - \sum_{i=1}^{m} \log \sigma_i
+     - \sum_{i=1}^{m} \frac{1}{2}\left(\frac{y_i-h_w(x_i)}{\sigma_i}\right)^2
   \end{equation}
 
 \begin{equation}
-     \frac{\partial}{\partial w_j} \log L(w) = \frac{\partial}{\partial w_j} \left(-\frac{1}{2} \log(2\pi) - \sum_{i=1}^{m} \log \sigma_i - \sum_{i=1}^{m} \left(\frac{(y_i-h_w(x_i))^2}{2\sigma_i^2}\right)\right)
+     \frac{\partial}{\partial w_j} \log L(w)
+     = \frac{\partial}{\partial w_j} \left(-\frac{1}{2} \log(2\pi)
+     - \sum_{i=1}^{m} \log \sigma_i
+     - \sum_{i=1}^{m} \frac{1}{2}\left(\frac{y_i-h_w(x_i)}{\sigma_i}\right)^2\right)
 \end{equation}
+
 \begin{equation}
-     w^* = (X\Omega^{-1} X)^{-1} X\Omega^{-1} Y
+     \frac{\partial}{\partial w_j} \log L(w) =
+     - \sum_{i=1}^{m} \frac{x_i}{\sigma_i}\left(\frac{y_i-h_w(x_i)}{\sigma_i}\right)
+\end{equation}
+
+Simplying further while converting standard deviation to variance. Where $\sigma^2 = \Omega$.
+
+\begin{equation}
+     \frac{\partial}{\partial w_j} \log L(w) =
+     \sum_{i=1}^{m} \frac{x_iy_i}{\Omega_i}
+     - \sum_{i=1}^{m}\frac{h_w(x_i)x_i}{\Omega_i}
+\end{equation}
+
+\begin{equation}
+     \frac{\partial}{\partial w_j} \log L(w) =
+     X^T\Omega^{-1}Y - wX^T\Omega^{-1}X
+\end{equation}
+
+Now setting the gradiant to zero.
+
+\begin{equation}
+     0 =X^T\Omega^{-1}Y
+     - wX^T\Omega^{-1}X
+\end{equation}
+
+\begin{equation}
+     w^* = (X^T\Omega^{-1} X)^{-1} X^T\Omega^{-1} Y
 \end{equation}
 
 
@@ -162,19 +195,31 @@ this simplification is no longer achievable.
 
 
 \section*{Question 4}
+
   \begin{equation}
-    h_{w1,...wk}(x) = \prod_{k=1}^{K}e^{w_k^Tx}
+    h_{w1,...wk}(x)
+    = \prod_{k=1}^{K}\phi_k(x)
+  \end{equation}
+Where:
+  \begin{equation}
+    \phi_k(x) = e^{w_k^Tx}
+    = e^{\sum_{i=1}^m w_{ik}x_i}
+  \end{equation}
+Replacing $\phi_k(x)$
+
+  \begin{equation}
+    h_{w1,...wk}(x)
+    = \prod_{k=1}^{K}e^{\sum_{i=1}^m w_{ik}x_i}
   \end{equation}
 
   \begin{equation}
-    \log h_{w1,...wk}(x) = \sum_{k=1}^{K} w_k^Tx
+    \log h_{w1,...wk}(x)
+    = \sum_{k=1}^{K} \sum_{i=1}^m w_{ik}x_i
   \end{equation}
 
   \begin{equation}
-    \frac{\partial}{\partial w} \log h_{w1,...wk}(x) = \frac{\partial}{\partial w} \left(\sum_{k=1}^{K} w_k^Tx\right)
+    \frac{\partial}{\partial w} \log h_{w1,...wk}(x)
+    = \frac{\partial}{\partial w} \left(\sum_{k=1}^{K} \sum_{i=1}^m w_{ik}x_i\right)
   \end{equation}
 
-  \begin{equation}
-    \frac{\partial}{\partial w} \log h_{w1,...wk}(x) = \sum_{k=1}^{K} x^T
-  \end{equation}
 \end{document}
