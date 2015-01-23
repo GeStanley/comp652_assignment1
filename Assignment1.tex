@@ -167,6 +167,7 @@ Now setting the gradiant to zero.
 
 
 \section*{Question 3}
+Given the following huberized loss function:
 \begin{equation}
   L_H(w, \delta) = \left\{
   \begin{array}{l l}
@@ -174,7 +175,10 @@ Now setting the gradiant to zero.
     \delta | y_i - w^Tx_i | - \delta^2 / 2 & \quad \text{otherwise}
 
   \end{array} \right.\end{equation}
+
+
 \subsection*{A)}
+Find the derivative:
 \begin{equation}
   \frac{\partial}{\partial w} L_H(w, \delta) = \left\{
   \begin{array}{l l}
@@ -182,12 +186,13 @@ Now setting the gradiant to zero.
     \frac{\partial}{\partial w} \left(\delta | y_i - w^Tx_i | - \delta^2 / 2\right) & \quad \text{otherwise}
 
   \end{array} \right.\end{equation}
-
+The derivative of the huber loss function is done in two steps. The squared loss component can be derived as usual.
+However, the absolute loss cannot be differentiated when $ y_i - w^Tx_i = 0$.
 \begin{equation}
   \frac{\partial}{\partial w} L_H(w, \delta) = \left\{
   \begin{array}{l l}
-    (y_i - w^Tx_i) x_i^T & \quad \text{if }  | y_i - w^Tx_i | \leq \delta\\
-    \delta \frac{x_i^T}{| y_i - w^Tx_i |} & \quad \text{otherwise}
+    (y_i - w^Tx_i) x_i & \quad \text{if }  | y_i - w^Tx_i | \leq \delta\\
+    \delta sign ( y_i - w^Tx_i ) & \quad \text{otherwise}
 
   \end{array} \right.\end{equation}
 \subsection*{B)}

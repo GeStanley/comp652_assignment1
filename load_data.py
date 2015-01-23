@@ -134,18 +134,51 @@ def FiveFoldCrossValidation(feature_array, target_array):
     return 0
 
 
+def GradientDescent(feature_array, target_array, max_iterations, alpha, delta):
+
+    theta = numpy.ones(feature_array.shape[1])
+
+    x_transpose = feature_array.transpose()
+
+    m = feature_array.shape[0]
+
+    for iter in range(0, max_iterations):
+
+        for i in range(0, m):
+
+            x = feature_array[i]
+            y = target_array[i]
+
+            hypothesis = numpy.dot(theta, x)
+
+            if abs(y - hypothesis) <= delta:
+                loss = hypothesis - target_array
+
+                gradient = numpy.dot(x_transpose, loss)
+
+            else:
+                loss = hypothesis - target_array
+
+                gradient = delta * loss
+
+            theta = theta - alpha * gradient
 
 
-array_x = numpy.loadtxt('hw1x.dat', float)
-vector_y = numpy.loadtxt('hw1y.dat', float)
+    return theta
 
-#add a noise column of ones to the feature matrix
-array_ones = numpy.ones((array_x[:, 0].size, 1))
-array_x = numpy.append(array_x, array_ones, axis=1)
 
-FiveFoldCrossValidation(array_x, vector_y)
+if __name__ == '__main__':
 
-print FeatureNormalization(array_x, vector_y)
+    array_x = numpy.loadtxt('hw1x.dat', float)
+    vector_y = numpy.loadtxt('hw1y.dat', float)
+
+    #add a noise column of ones to the feature matrix
+    array_ones = numpy.ones((array_x[:, 0].size, 1))
+    array_x = numpy.append(array_x, array_ones, axis=1)
+
+    FiveFoldCrossValidation(array_x, vector_y)
+
+    print FeatureNormalization(array_x, vector_y)
 
 #matrix_x = numpy.matrix(array_x)
 
