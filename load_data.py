@@ -134,7 +134,7 @@ def FiveFoldCrossValidation(feature_array, target_array):
     return 0
 
 
-def GradientDescent(feature_array, target_array, max_iterations, alpha, delta):
+def GradientDescent(feature_array, target_array, max_iterations, alpha, delta, lamb):
 
     theta = numpy.ones(feature_array.shape[1])
 
@@ -163,6 +163,8 @@ def GradientDescent(feature_array, target_array, max_iterations, alpha, delta):
 
             theta = theta - alpha * gradient
 
+
+    theta = theta + lamb/2 * numpy.dot(x_transpose, feature_array)
 
     return theta
 
