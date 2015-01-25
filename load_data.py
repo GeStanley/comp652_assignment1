@@ -103,7 +103,7 @@ def CalculateError(feature_array, target_array, weights):
 
     return error / target_array.shape[0]
 
-def FiveFoldCrossValidation(feature_array, target_array):
+def FiveFoldCrossValidation(feature_array, target_array, lamb = None):
 
     complete_array = numpy.append(feature_array, target_array[:, numpy.newaxis], axis=1)
 
@@ -127,7 +127,10 @@ def FiveFoldCrossValidation(feature_array, target_array):
                 training_target = training_data[:, training_data.shape[1]-1]
 
 
-        weights = LinearRegression(training_features, training_target[:, numpy.newaxis])
+        if lamb==None:
+            weights = LinearRegression(training_features, training_target[:, numpy.newaxis])
+        else:
+            weights = LinearRegressionWithL2Regularization(training_features, training_target[:, numpy.newaxis], lamb)
 
         training_error = CalculateError(training_features, training_target, weights.transpose())
 
@@ -164,7 +167,8 @@ def FiveFoldCrossValidation(feature_array, target_array):
     result = {'train_avg': mean(training_list),
               'train_std': stddev(training_list),
               'test_avg': mean(testing_list),
-              'test_std': stddev(testing_list)}
+              'test_std': stddev(testing_list),
+              'weights': all_weights[key]}
 
     return result
 
@@ -291,8 +295,35 @@ if __name__ == '__main__':
 
     print "QUESTION 1 F"
 
+    terror = []
+    verror = []
+    lambdas = []
+    weights = []
 
-    print LinearRegressionWithL2Regularization(array_x_d4_norm, vector_y, 0.5)
+    for l in numpy.arange(0, 1, 0.01):
+
+        errors = FiveFoldCrossValidation(array_x_d4_norm, vector_y, l)
+        lambdas.append(l)
+        terror.append(errors['train_avg'])
+        verror.append(errors['test_avg'])
+        weights.append(errors['weights'])
+
+
+    print lambdas
+    print terror
+
+    plt.plot(lambdas, terror)
+    plt.plot(lambdas, verror)
+
+    plt.show()
+    for degree in range(0, weights[0].shape[0]):
+        weight_list = []
+        for element in weights:
+            weight_list.append(element[degree])
+
+        plt.plot(lambdas, weight_list)
+
+    plt.show()
 #matrix_x = numpy.matrix(array_x)
 
 # print array_x[:, 0].shape
