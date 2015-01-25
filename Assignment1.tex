@@ -76,16 +76,19 @@
 \subsection*{A)}
 See source code.
 \subsection*{B)}
+Let $a$ be a vector equal to $[1/max_i |x_j|, ..., 1/max_i |x_n|]$. And let $A$
+be a matrix such that $A=aI$. Substituting $X$ by $AX$ in the closed form regression
+algorithm we obtain:
 \begin{equation}
-  w = \begin{pmatrix}
-        0.88485161 & 11.02552359 & -9.35666242
-      \end{pmatrix}
+  \begin{aligned}
+  2(AX)^TAXw &= 2(AX)^TY \\
+  2AX^TAXw &= 2AX^TY \\
+  X^TAXw &= X^TY \\
+  Aw &= (X^TX)^{-1}X^TY \\
+  \end{aligned}
 \end{equation}
-\begin{equation}
-  w_{normalized} = \begin{pmatrix}
-                    7.07067572 & 84.7476132 & -9.35666242
-                    \end{pmatrix}
-\end{equation}
+As such, we can conclude that normalization is equivalent to multiplying the $w$
+vector by some scalar.
 \subsection*{C)}
 See source code.
 \subsection*{D)}
@@ -106,6 +109,8 @@ Fold \#5 results are:\\
 Training error is : [ 20136.42642011]\\
 Testing error is : [ 2188.4234707]\\
 \subsection*{F)}
+\includegraphics[width=250pt, keepaspectratio=true]{error.png}
+\includegraphics[width=250pt, keepaspectratio=true]{weights.png}
 
 \section*{Question 2}
 When simplifying the maximum likelihood equation for a regression whose variables
@@ -190,33 +195,77 @@ Find the derivative:
     \frac{\partial}{\partial w} \left(\delta | y_i - w^Tx_i | - \delta^2 / 2\right) & \quad \text{otherwise}
 
   \end{array} \right.\end{equation}
+  \\
+  
 The equation $| y_i - w^Tx_i |$ is equivalent to $\sqrt{( y_i - w^Tx_i )^2}$ as such
 the derivative becomes:
 
   \begin{equation}
     \frac{\partial}{\partial w} L_H(w, \delta) = \left\{
     \begin{array}{l l}
-      (y_i - w^Tx_i) x_i & \quad \text{if }  | y_i - w^Tx_i | \leq \delta\\
-      \delta \frac{y_i - w^Tx_i}{| y_i - w^Tx_i |} x_i & \quad \text{otherwise}
+      - x_i (y_i - w^Tx_i)  & \quad \text{if }  | y_i - w^Tx_i | \leq \delta\\
+      - x_i \delta \frac{y_i - w^Tx_i}{| y_i - w^Tx_i |}  & \quad \text{otherwise}
 
     \end{array} \right.\end{equation}
+    \\
+
 The expression $\frac{y_i - w^Tx_i}{| y_i - w^Tx_i |}$ is equivalent to the sign
 of $y_i - w^Tx_i$ as such the derivative can be written as:
 
 \begin{equation}
   \frac{\partial}{\partial w} L_H(w, \delta) = \left\{
   \begin{array}{l l}
-    (y_i - w^Tx_i) x_i & \quad \text{if }  | y_i - w^Tx_i | \leq \delta\\
-    \delta sign ( y_i - w^Tx_i ) x_i & \quad \text{otherwise}
+    - x_i (y_i - w^Tx_i) & \quad \text{if }  | y_i - w^Tx_i | \leq \delta\\
+    - x_i \delta sign ( y_i - w^Tx_i ) & \quad \text{otherwise}
 
   \end{array} \right.\end{equation}
+  \\
 
-Where $sign(y_i - w^Tx_i)$ is replaced by 1 or -1 depending on the result of the
+Where $sign(y_i - w^Tx_i)$ is replaced by 1 or -1 depending on whether the result of the
 equation is positive or negative.
 
 \subsection*{B)}
 The algorithm was implemented in python source code and is defined as function
 GradientDescent.
+\\
+\begin{algorithm}[H]
+ \KwData{a dataset containing features and targets, learning rate, lambda, delta}
+ \KwResult{a weight vector }
+
+ initialize weights to 1 or a random numbers\;
+
+ \While{max iterations not achieved}{
+   initialize gradient = 0\;
+  \While{not at the last row of the data array}{
+
+    hypothesis = dot product (weights , row of features)\;
+
+    \eIf{$| y_i - w^Tx_i | \leq delta$}{
+
+      loss = hypothesis - row of targets\;
+      J = dot product ( transpose of the row features, loss )\;
+      gradient += J + lambda/2 * dot product(transpose of weights, weights)\;
+
+     }{
+     loss = hypothesis - row of targets\;
+     \eIf{loss is negative}{
+       gradient += delta * row of features
+     }{
+       gradient -= delta * row of features
+     }
+    }
+
+    go to the next row\;
+  }
+  \If{gradient * learning rate is smaller then desired precision}{
+    return weights\;
+  }
+
+  weights = weights + (learning rate) * gradient
+ }
+ return weights\;
+ \caption{Gradient descent using huber loss function}
+\end{algorithm}
 \subsection*{C)}
 
 

@@ -42,19 +42,19 @@ def LinearRegressionWithL2Regularization(feature_array, target_array, lamb):
 
     return numpy.dot(inverse, right_part)
 
-def FeatureNormalization(feature_array, target_array):
-
-    array_shape = feature_array.shape
-
-    weights = numpy.zeros((2, array_shape[1]))
-
-    weights[0] = LinearRegression(feature_array, target_array)
-
-    normalized_feature_array = BuildNormalizedArray(feature_array)
-
-    weights[1] = LinearRegression(normalized_feature_array, target_array)
-
-    return weights
+# def FeatureNormalization(feature_array, target_array):
+#
+#     array_shape = feature_array.shape
+#
+#     weights = numpy.zeros((2, array_shape[1]))
+#
+#     weights[0] = LinearRegression(feature_array, target_array)
+#
+#     normalized_feature_array = BuildNormalizedArray(feature_array)
+#
+#     weights[1] = LinearRegression(normalized_feature_array, target_array)
+#
+#     return weights
 
 def BuildNormalizedArray(original_array):
 
@@ -107,6 +107,9 @@ def CalculateError(feature_array, target_array, weights):
 
 
     return error / target_array.shape[0]
+
+def FixingFiveFold():
+    return 0
 
 def FiveFoldCrossValidation(feature_array, target_array, lamb = None):
 
@@ -321,26 +324,31 @@ if __name__ == '__main__':
     lambdas = []
     weights = []
 
-    # for i in numpy.arange(0, 0.004, 0.00001):
-    #
-    #     print i
-    #     errors = FiveFoldCrossValidation(array_x_d4_norm, vector_y, i)
-    #     lambdas.append(i)
-    #     terror.append(errors['train_avg'])
-    #     verror.append(errors['test_avg'])
-    #     weights.append(errors['weights'])
+    for i in numpy.arange(1, 500, 1):
 
-    poly_array = PolyRegress(array_x, 4)
-    poly_norm = BuildNormalizedArray(poly_array)
-    errors = FiveFoldCrossValidation(poly_norm, vector_y, 0.0000000136)
+        print i
+        errors = FiveFoldCrossValidation(array_x_d4_norm, vector_y, i)
+        lambdas.append(i)
+        terror.append(errors['train_avg'])
+        verror.append(errors['test_avg'])
+        weights.append(errors['weights'])
+
 
     print errors
 
     print lambdas
     print terror
+    print verror
 
-    plt.plot(lambdas, terror)
-    plt.plot(lambdas, verror)
+    one_over_lambdas = [float(1.0/l) for l in lambdas]
+
+    print one_over_lambdas
+
+    plt.plot(one_over_lambdas, terror)
+    plt.plot(one_over_lambdas, verror)
+
+    plt.ylabel('mean squared error')
+    plt.xlabel('1/$\lambda$')
 
     plt.show()
     for degree in range(0, weights[0].shape[0]):
@@ -349,6 +357,10 @@ if __name__ == '__main__':
             weight_list.append(element[degree])
 
         plt.plot(lambdas, weight_list)
+
+
+    plt.ylabel('mean squared error')
+    plt.xlabel('$\lambda$')
 
     plt.show()
 
