@@ -28,11 +28,14 @@ def LinearRegressionWithL2Regularization(feature_array, target_array, lamb):
 
     dot_product = numpy.dot(feature_array_transposed, feature_array)
 
+
     identity = numpy.identity(feature_array.shape[1], dtype=float)
 
     lamb_result = numpy.dot(lamb, identity)
 
+
     inverse = numpy.linalg.inv(dot_product + lamb_result)
+
 
     right_part = numpy.dot(feature_array_transposed, target_array)
 
@@ -98,7 +101,9 @@ def CalculateError(feature_array, target_array, weights):
 
         estimate = numpy.sum(feature_array[row] * weights, axis=1)
 
-        error += (estimate - target_array[row]) ** 2
+        target = numpy.sum(target_array[row])
+
+        error += (estimate - target) ** 2
 
 
     return error / target_array.shape[0]
@@ -133,8 +138,6 @@ def FiveFoldCrossValidation(feature_array, target_array, lamb = None):
             weights = LinearRegressionWithL2Regularization(training_features, training_target[:, numpy.newaxis], lamb)
 
         training_error = CalculateError(training_features, training_target, weights.transpose())
-
-
 
         testing_features = five_folds[i][:, 0:five_folds[i].shape[1]-1]
         testing_target = five_folds[i][:, five_folds[i].shape[1]-1]
@@ -221,6 +224,7 @@ def stddev(lst):
     variance = sum([(e-mn)**2 for e in lst])
     return sqrt(variance)
 
+
 if __name__ == '__main__':
 
     #############
@@ -237,6 +241,8 @@ if __name__ == '__main__':
     #############
     #question 1 b
     #############
+    print
+    print
     print "QUESTION 1 B"
     array_x_norm  = BuildNormalizedArray(array_x)
 
@@ -270,21 +276,32 @@ if __name__ == '__main__':
     #############
     #question 1 d
     #############
+    print
+    print
     print "QUESTION 1 D"
     FiveFoldCrossValidation(array_x, vector_y)
 
-
+    #############
+    #question 1 e
+    #############
+    print
+    print
     print "QUESTION 1 E"
 
     stats = {}
 
     for d in range(0, 5):
+        print
+        print 'Running regression on polynomials of degree : %s' % str(d+1)
         poly_array = PolyRegress(array_x, d+1)
         poly_norm = BuildNormalizedArray(poly_array)
 
         stats[d] = FiveFoldCrossValidation(poly_array, vector_y)
 
+    print
+    print
 
+    print 'degree   terror  tstd    verror  vstd'
     for key in stats.keys():
         print '%s   %9.5f  %9.5f  %9.5f  %9.5f  ' % (key+1,
                                          stats[key]['train_avg'],
@@ -292,7 +309,11 @@ if __name__ == '__main__':
                                          stats[key]['test_avg'],
                                          stats[key]['test_std'])
 
-
+    #############
+    #question 1 f
+    #############
+    print
+    print
     print "QUESTION 1 F"
 
     terror = []
@@ -300,14 +321,20 @@ if __name__ == '__main__':
     lambdas = []
     weights = []
 
-    for l in numpy.arange(0, 1, 0.01):
+    # for i in numpy.arange(0, 0.004, 0.00001):
+    #
+    #     print i
+    #     errors = FiveFoldCrossValidation(array_x_d4_norm, vector_y, i)
+    #     lambdas.append(i)
+    #     terror.append(errors['train_avg'])
+    #     verror.append(errors['test_avg'])
+    #     weights.append(errors['weights'])
 
-        errors = FiveFoldCrossValidation(array_x_d4_norm, vector_y, l)
-        lambdas.append(l)
-        terror.append(errors['train_avg'])
-        verror.append(errors['test_avg'])
-        weights.append(errors['weights'])
+    poly_array = PolyRegress(array_x, 4)
+    poly_norm = BuildNormalizedArray(poly_array)
+    errors = FiveFoldCrossValidation(poly_norm, vector_y, 0.0000000136)
 
+    print errors
 
     print lambdas
     print terror
@@ -324,6 +351,14 @@ if __name__ == '__main__':
         plt.plot(lambdas, weight_list)
 
     plt.show()
+
+    #############
+    #question 2 c
+    #############
+    print "QUESTION 2 C"
+
+
+
 #matrix_x = numpy.matrix(array_x)
 
 # print array_x[:, 0].shape
