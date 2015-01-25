@@ -1,6 +1,7 @@
 __author__ = 'geoffrey'
 
 import numpy
+from math import sqrt
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.linear_model import LinearRegression
@@ -20,6 +21,23 @@ def LinearRegression(feature_array, target_array):
     weights = numpy.dot(inverse, dot_product)
 
     return weights
+
+def LinearRegressionWithL2Regularization(feature_array, target_array, lamb):
+
+    feature_array_transposed = feature_array.transpose()
+
+    dot_product = numpy.dot(feature_array_transposed, feature_array)
+
+    identity = numpy.identity(feature_array.shape[1], dtype=float)
+
+    lamb_result = numpy.dot(lamb, identity)
+
+    inverse = numpy.linalg.inv(dot_product + lamb_result)
+
+    right_part = numpy.dot(feature_array_transposed, target_array)
+
+
+    return numpy.dot(inverse, right_part)
 
 def FeatureNormalization(feature_array, target_array):
 
@@ -50,13 +68,7 @@ def BuildNormalizedArray(original_array):
 
     return normalized_array
 
-
-def PolyRegress(feature_array, target_array, degree):
-
-    return 0
-
-
-def BuildPolynomialArray(original_array, degree):
+def PolyRegress(original_array, degree):
 
     polynomial_array = numpy.empty((original_array.shape[0], 0), dtype=float)
 
@@ -89,13 +101,17 @@ def CalculateError(feature_array, target_array, weights):
         error += (estimate - target_array[row]) ** 2
 
 
-    return error
+    return error / target_array.shape[0]
 
 def FiveFoldCrossValidation(feature_array, target_array):
 
     complete_array = numpy.append(feature_array, target_array[:, numpy.newaxis], axis=1)
 
     five_folds = numpy.array_split(complete_array, 5)
+
+    training_errors = {}
+    testing_errors = {}
+    all_weights = {}
 
     #go through the 5 training cases
     for i in range(0, 5):
@@ -122,6 +138,9 @@ def FiveFoldCrossValidation(feature_array, target_array):
 
         testing_error = CalculateError(testing_features, testing_target, weights.transpose())
 
+        training_errors[i+1] = training_error
+        testing_errors[i+1] = testing_error
+        all_weights[i+1] = weights.transpose()
 
         print 'Fold #%s results are:' % (i+1)
 
@@ -129,9 +148,25 @@ def FiveFoldCrossValidation(feature_array, target_array):
         print 'Testing error is : %s' % testing_error
 
 
+    key = min(testing_errors, key=testing_errors.get)
+
+    print 'Optimal run is: %s' % key
+    print 'Optimal weight vector is: %s' % (all_weights[key])
+
+    training_list = []
+    testing_list = []
+
+    for key in training_errors.keys():
+        training_list.append(training_errors[key])
+        testing_list.append(testing_errors[key])
 
 
-    return 0
+    result = {'train_avg': mean(training_list),
+              'train_std': stddev(training_list),
+              'test_avg': mean(testing_list),
+              'test_std': stddev(testing_list)}
+
+    return result
 
 
 def GradientDescent(feature_array, target_array, max_iterations, alpha, delta, lamb):
@@ -154,12 +189,16 @@ def GradientDescent(feature_array, target_array, max_iterations, alpha, delta, l
             if abs(y - hypothesis) <= delta:
                 loss = hypothesis - target_array
 
-                gradient = numpy.dot(x_transpose, loss)
+                J = numpy.dot(x_transpose, loss)
+
+                gradient = J + lamb/2 * numpy.dot(theta.transpose(), theta)
 
             else:
                 loss = hypothesis - target_array
 
-                gradient = delta * loss
+                J  = delta * loss
+
+                gradient = J + lamb/2 * numpy.dot(theta.transpose(), theta)
 
             theta = theta - alpha * gradient
 
@@ -168,9 +207,22 @@ def GradientDescent(feature_array, target_array, max_iterations, alpha, delta, l
 
     return theta
 
+def mean(lst):
+    """calculates mean"""
+    return float(sum(lst) / len(lst))
+
+def stddev(lst):
+    """returns the standard deviation of lst"""
+    mn = mean(lst)
+    variance = sum([(e-mn)**2 for e in lst])
+    return sqrt(variance)
 
 if __name__ == '__main__':
 
+    #############
+    #question 1 a
+    #############
+    print "QUESTION 1 A"
     array_x = numpy.loadtxt('hw1x.dat', float)
     vector_y = numpy.loadtxt('hw1y.dat', float)
 
@@ -178,10 +230,69 @@ if __name__ == '__main__':
     array_ones = numpy.ones((array_x[:, 0].size, 1))
     array_x = numpy.append(array_x, array_ones, axis=1)
 
+    #############
+    #question 1 b
+    #############
+    print "QUESTION 1 B"
+    array_x_norm  = BuildNormalizedArray(array_x)
+
+    array_x_d2 = PolyRegress(array_x, 2)
+    array_x_d2_norm = BuildNormalizedArray(array_x_d2)
+
+    array_x_d3 = PolyRegress(array_x, 3)
+    array_x_d3_norm = BuildNormalizedArray(array_x_d3)
+
+    array_x_d4 = PolyRegress(array_x, 4)
+    array_x_d4_norm = BuildNormalizedArray(array_x_d4)
+
+    array_x_d5 = PolyRegress(array_x, 5)
+    array_x_d5_norm = BuildNormalizedArray(array_x_d5)
+
+    print LinearRegression(array_x, vector_y)
+    print LinearRegression(array_x_norm, vector_y)
+
+    print LinearRegression(array_x_d2, vector_y)
+    print LinearRegression(array_x_d2_norm, vector_y)
+
+    print LinearRegression(array_x_d3, vector_y)
+    print LinearRegression(array_x_d3_norm, vector_y)
+
+    print LinearRegression(array_x_d4, vector_y)
+    print LinearRegression(array_x_d4_norm, vector_y)
+
+    print LinearRegression(array_x_d5, vector_y)
+    print LinearRegression(array_x_d5_norm, vector_y)
+
+    #############
+    #question 1 d
+    #############
+    print "QUESTION 1 D"
     FiveFoldCrossValidation(array_x, vector_y)
 
-    print FeatureNormalization(array_x, vector_y)
 
+    print "QUESTION 1 E"
+
+    stats = {}
+
+    for d in range(0, 5):
+        poly_array = PolyRegress(array_x, d+1)
+        poly_norm = BuildNormalizedArray(poly_array)
+
+        stats[d] = FiveFoldCrossValidation(poly_array, vector_y)
+
+
+    for key in stats.keys():
+        print '%s   %9.5f  %9.5f  %9.5f  %9.5f  ' % (key+1,
+                                         stats[key]['train_avg'],
+                                         stats[key]['train_std'],
+                                         stats[key]['test_avg'],
+                                         stats[key]['test_std'])
+
+
+    print "QUESTION 1 F"
+
+
+    print LinearRegressionWithL2Regularization(array_x_d4_norm, vector_y, 0.5)
 #matrix_x = numpy.matrix(array_x)
 
 # print array_x[:, 0].shape

@@ -61,7 +61,7 @@ class TestAssignment1(unittest.TestCase):
                                [0.17, 1]])
 
 
-        result = load_data.BuildPolynomialArray(dataset, 2)
+        result = load_data.PolyRegress(dataset, 2)
 
         expected_result = numpy.array([[0.7396, 0.86, 1],
                                [0.0081, 0.09, 1],
@@ -82,7 +82,7 @@ class TestAssignment1(unittest.TestCase):
                        [4, -0.85, 1]])
 
 
-        result = load_data.BuildPolynomialArray(dataset, 2)
+        result = load_data.PolyRegress(dataset, 2)
 
         expected_result = numpy.array([[9, 0.75, 3, 0.86, 1],
                                [4, 0.01, 2, 0.09, 1],
