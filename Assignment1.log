@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2015.1.16)  26 JAN 2015 11:50
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2015.1.16)  26 JAN 2015 17:09
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -706,48 +706,54 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [1
 
 {/usr/local/texlive/2014/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-Overfull \hbox (23.27399pt too wide) in paragraph at lines 106--122
- [] 
- []
-
 <error.png, id=12, 586.8324pt x 442.2924pt>
 File: error.png Graphic file (type png)
  <use error.png>
-Package pdftex.def Info: error.png used on input line 124.
+Package pdftex.def Info: error.png used on input line 123.
 (pdftex.def)             Requested size: 250.0pt x 188.42058pt.
 
 <weights.png, id=14, 586.8324pt x 442.2924pt>
 File: weights.png Graphic file (type png)
  <use weights.png>
-Package pdftex.def Info: weights.png used on input line 125.
+Package pdftex.def Info: weights.png used on input line 124.
 (pdftex.def)             Requested size: 250.0pt x 188.42058pt.
 
-Overfull \hbox (32.46722pt too wide) in paragraph at lines 124--126
-[] [] 
- []
-
-[1 <./error.png> <./weights.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 209--211
-
+Overfull \hbox (32.46722pt too wide) in paragraph at lines 123--128
+[] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 221--223
+Underfull \hbox (badness 10000) in paragraph at lines 123--128
 
  []
 
-[2]
-Underfull \hbox (badness 10000) in paragraph at lines 233--235
+[1]
+Underfull \hbox (badness 10000) in paragraph at lines 129--133
 
  []
 
-[3] 
+[2 <./error.png> <./weights.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 218--220
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 230--232
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 242--244
+
+ []
+
+[3] [4] 
 AED: lastpage setting LastPage
-[4] (./Assignment1.aux) ) 
+[5] (./Assignment1.aux) ) 
 Here is how much of TeX's memory you used:
  15979 strings out of 493109
  294842 string characters out of 6135010
- 403985 words of memory out of 5000000
+ 402985 words of memory out of 5000000
  19098 multiletter control sequences out of 15000+600000
  13805 words of font info for 52 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -769,10 +775,10 @@ y10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy
 pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.p
 fb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pf
 b>
-Output written on Assignment1.pdf (5 pages, 255199 bytes).
+Output written on Assignment1.pdf (6 pages, 259158 bytes).
 PDF statistics:
- 92 PDF objects out of 1000 (max. 8388607)
- 64 compressed objects within 1 object stream
+ 95 PDF objects out of 1000 (max. 8388607)
+ 66 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  23 words of extra memory for PDF output out of 10000 (max. 10000000)
 

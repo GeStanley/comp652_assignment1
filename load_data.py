@@ -87,15 +87,11 @@ def CalculateError(feature_array, target_array, weights):
 
     return error / target_array.shape[0]
 
-def FiveFoldCrossValidation(feature_array, target_array, degree = None, lamb = None):
+def FiveFoldCrossValidation(feature_array, target_array, function='linear', degree=None, delta=None, lamb=None):
 
-    complete_array = numpy.append(feature_array, target_array[:, numpy.newaxis], axis=1)
+    complete_array = numpy.append(BuildNormalizedArray(feature_array), target_array[:, numpy.newaxis], axis=1)
 
-    print complete_array
-
-    complete_array = shuffle(complete_array, random_state=5)
-
-    print complete_array
+    complete_array = shuffle(complete_array, random_state=125)
 
     five_folds = numpy.array_split(complete_array, 5)
 
@@ -136,23 +132,32 @@ def FiveFoldCrossValidation(feature_array, target_array, degree = None, lamb = N
             start = 0
             end = 5
         else:
-            start = degree
-            end = degree+1
+            start = degree-1
+            end = degree
+
 
         for d in range(start, end):
 
-            poly_training_features = BuildNormalizedArray(PolyRegress(training_features, d+1))
-            poly_validation_features = BuildNormalizedArray(PolyRegress(validation_features, d+1))
-            poly_testing_features = BuildNormalizedArray(PolyRegress(testing_features, d+1))
+            poly_training_features = PolyRegress(training_features, d+1)
+            poly_validation_features = PolyRegress(validation_features, d+1)
 
             # perform regression using the training set
-            if lamb is None:
-                weights = LinearRegression(poly_training_features, training_target[:, numpy.newaxis])
-            else:
-                weights = LinearRegressionWithL2Regularization(poly_training_features, training_target[:, numpy.newaxis], lamb)
+            if function=='linear':
+                weights = LinearRegression(poly_training_features,
+                                           training_target[:, numpy.newaxis])
+            elif function=='regularize':
+                weights = LinearRegressionWithL2Regularization(poly_training_features,
+                                                               training_target[:, numpy.newaxis],
+                                                               lamb)
+            elif function=='gradient':
+                weights = GradientDescent(poly_training_features,
+                                          training_target[:, numpy.newaxis],
+                                          100,
+                                          delta)
 
+            validation_error = CalculateError(poly_validation_features, validation_target, weights.transpose())
 
-            validation_errors[d] = CalculateError(poly_validation_features, validation_target, weights.transpose())
+            validation_errors[d] = validation_error
 
             hypothesis_weights[d] = weights.transpose()
 
@@ -162,9 +167,9 @@ def FiveFoldCrossValidation(feature_array, target_array, degree = None, lamb = N
         optimal_degree = min_key + 1
         optimal_weights = hypothesis_weights[min_key]
 
-        poly_training_features = BuildNormalizedArray(PolyRegress(training_features, optimal_degree))
-        poly_validation_features = BuildNormalizedArray(PolyRegress(validation_features, optimal_degree))
-        poly_testing_features = BuildNormalizedArray(PolyRegress(testing_features, optimal_degree))
+        poly_training_features = PolyRegress(training_features, optimal_degree)
+        poly_validation_features = PolyRegress(validation_features, optimal_degree)
+        poly_testing_features = PolyRegress(testing_features, optimal_degree)
 
         training_error = CalculateError(numpy.append(poly_training_features, poly_validation_features, axis=0),
                                         numpy.append(training_target, validation_target, axis=0),
@@ -181,7 +186,8 @@ def FiveFoldCrossValidation(feature_array, target_array, degree = None, lamb = N
 
     return returned_statistics
 
-def GradientDescent(feature_array, target_array, max_iterations, alpha, delta, lamb):
+def GradientDescent(feature_array, target_array, max_iterations, delta, alpha=0.01):
+
 
     theta = numpy.ones(feature_array.shape[1])
 
@@ -189,35 +195,43 @@ def GradientDescent(feature_array, target_array, max_iterations, alpha, delta, l
 
     m = feature_array.shape[0]
 
-    for iter in range(0, max_iterations):
+    for iteration in range(0, max_iterations):
+
+
 
         for i in range(0, m):
-
+            gradient = 0
             x = feature_array[i]
             y = target_array[i]
 
             hypothesis = numpy.dot(theta, x)
+            loss = y - hypothesis
 
-            if abs(y - hypothesis) <= delta:
-                loss = hypothesis - target_array
+            print loss
 
-                J = numpy.dot(x_transpose, loss)
+            if abs(loss) <= delta:
 
-                gradient = J + lamb/2 * numpy.dot(theta.transpose(), theta)
+                J = -x * loss
+
+                gradient = -J
 
             else:
-                loss = hypothesis - target_array
 
-                J  = delta * loss
+                if loss < 0:
+                    gradient = delta * x * loss
+                else:
+                    gradient = -delta * x * loss
 
-                gradient = J + lamb/2 * numpy.dot(theta.transpose(), theta)
-
+            print gradient
+            print alpha
+            print theta
             theta = theta - alpha * gradient
+            print theta
+
+    #theta = theta + numpy.dot(x_transpose, feature_array)
 
 
-    theta = theta + lamb/2 * numpy.dot(x_transpose, feature_array)
-
-    return theta
+    return theta[:, numpy.newaxis]
 
 def mean(lst):
     """calculates mean"""
@@ -246,13 +260,13 @@ if __name__ == '__main__':
     #############
     # question 1 e
     #############
-    print
-    print
-    print "QUESTION 1 E"
-    stats = FiveFoldCrossValidation(array_x, vector_y)
-
-    for key in stats.keys():
-        print stats[key]
+    # print
+    # print
+    # print "QUESTION 1 E"
+    # stats = FiveFoldCrossValidation(array_x, vector_y)
+    #
+    # for key in stats.keys():
+    #     print stats[key]
 
 
     #############
@@ -266,88 +280,73 @@ if __name__ == '__main__':
     test_error = []
     lambdas = []
     weights = []
-
-    for i in numpy.arange(1, 500, 1):
-
-        errors = FiveFoldCrossValidation(array_x, vector_y, 4, i)
-        lambdas.append(i)
-        train_error.append(errors[0]['training_error'])
-        test_error.append(errors[0]['testing_error'])
-        weights.append(errors[0]['optimal_weights'])
-
-
-    one_over_lambdas = [float(1.0/l) for l in lambdas]
-
-    line_train = plt.plot(one_over_lambdas, train_error, label="Training Error")
-    line_test = plt.plot(one_over_lambdas, test_error, label="Testing Error")
-
-    plt.legend(loc=0, borderaxespad=0.)
-    plt.ylabel('mean squared error')
-    plt.xlabel('1/$\lambda$')
-
-    plt.show()
-
-    for degree in range(0, weights[0].shape[0]):
-        weight_list = []
-        for element in weights:
-
-            weight_list.append(element[degree])
-
-        plt.plot(lambdas, weight_list)
-
-
-    plt.ylabel('mean squared error')
-    plt.xlabel('$\lambda$')
-
-    plt.show()
+    #
+    # for i in numpy.arange(1, 100, 1):
+    #
+    #     errors = FiveFoldCrossValidation(array_x, vector_y, function='regularize', degree=4, lamb=i)
+    #     lambdas.append(i)
+    #     train_error.append(errors[0]['training_error'])
+    #     test_error.append(errors[0]['testing_error'])
+    #     weights.append(errors[0]['optimal_weights'])
+    #
+    #
+    # one_over_lambdas = [float(1.0/l) for l in lambdas]
+    #
+    # line_train = plt.plot(one_over_lambdas, train_error, label="Training Error")
+    # line_test = plt.plot(one_over_lambdas, test_error, label="Testing Error")
+    #
+    # plt.legend(loc=0, borderaxespad=0.)
+    # plt.ylabel('mean squared error')
+    # plt.xlabel('1/$\lambda$')
+    #
+    # plt.show()
+    #
+    # for degree in range(0, weights[0].shape[0]):
+    #     weight_list = []
+    #     for element in weights:
+    #
+    #         weight_list.append(element[degree])
+    #
+    #     plt.plot(lambdas, weight_list)
+    #
+    #
+    # plt.ylabel('mean squared error')
+    # plt.xlabel('$\lambda$')
+    #
+    # plt.show()
 
     #############
     # question 2 c
     #############
     print "QUESTION 2 C"
 
+    weights = GradientDescent(BuildNormalizedArray(PolyRegress(array_x, 4)),
+                          vector_y,
+                          max_iterations=100,
+                          delta = 10)
+
+    print weights
+
+    train_error = []
+    test_error = []
+    deltas = []
+    weights = []
+
+    for i in numpy.arange(1, 100, 1):
+
+        errors = FiveFoldCrossValidation(array_x, vector_y, function='gradient', degree=4, delta=i)
+        deltas.append(i)
+        train_error.append(errors[0]['training_error'])
+        test_error.append(errors[0]['testing_error'])
+        weights.append(errors[0]['optimal_weights'])
 
 
-#matrix_x = numpy.matrix(array_x)
 
-# print array_x[:, 0].shape
-# print type(array_x[:, 0])
-# print vector_y.shape
-# print type(vector_y)
+    line_train = plt.plot(deltas, train_error, label="Training Error")
+    line_test = plt.plot(deltas, test_error, label="Testing Error")
 
-# poly = PolynomialFeatures(degree=2)
-#
-#
-# model = Pipeline([('poly', poly),
-#                 ('linear', regression)])
-#
-# plt.figure(figsize=(14, 4))
-#
-# for i in range(0, 3):
-#     ax = plt.subplot(1, 3, i+1)
-#     plt.setp(ax)
-#
-#     regression = LinearRegression()
-#
-#     regression.fit(array_x[:, i, numpy.newaxis], vector_y[:, numpy.newaxis])
-#
-#     # Plot outputs
-#     plt.scatter(array_x[:, i], vector_y[:, numpy.newaxis],  color='black')
-#
-#     print array_x[:, i]
-#     print vector_y[:, numpy.newaxis]
-#
-#     sorted_x = numpy.sort(array_x[:, i, numpy.newaxis], axis=0)
-#
-#     plt.plot(sorted_x, regression.predict(sorted_x), color='blue', linewidth=3)
-#
-#     min_x = min(sorted_x) - 1
-#     max_x = max(sorted_x) + 1
-#
-#     plt.axis([min_x, max_x, -20, 140])
-#     plt.title("Feature %d" % i)
-#
-# # plt.xticks(())
-# # plt.yticks(())
-#
-# plt.show()
+    plt.legend(loc=0, borderaxespad=0.)
+    plt.ylabel('mean squared error')
+    plt.xlabel('1/$\lambda$')
+
+    plt.show()

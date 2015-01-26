@@ -82,7 +82,7 @@ algorithm we obtain:
 \begin{equation}
   \begin{aligned}
   2(AX)^TAXw &= 2(AX)^TY \\
-  2AX^TAXw &= 2AX^TY \\
+  2A^TX^TAXw &= 2A^TX^TY \\
   X^TAXw &= X^TY \\
   Aw &= (X^TX)^{-1}X^TY \\
   \end{aligned}
@@ -92,38 +92,47 @@ vector by some scalar.
 \subsection*{C)}
 See source code.
 \subsection*{D)}
+See source code.
 \subsection*{E)}
 \begin{center}
     \begin{tabular}{| l | l | l | l | l | l | l | l |}
     \hline
     Fold & 1 & 2 & 3 & 4 & 5 & Avg & Std \\ \hline
-    Training Error & 6.6514 & 19.2372 & 64.0957 & 3.5362 & 7.9715 & &  \\ \hline
-    Testing Error & 12.0617 & 65.2324 & 63.7457 & 242.0755 & 27.4566 & &  \\ \hline
-    Best Hypothesis Class & 3 & 2 & 5 & 5 & 3 & & \\ \hline
+    Training Error & 1.0728 & 0.7786 & 0.9651 & 0.7456 & 0.9245 & &  \\ \hline
+    Testing Error & 0.5850 & 2.0271 & 0.9211 & 1.9323 & 0.9507 & & \\ \hline
+    Best Hypothesis Class & 3 & 3 & 3 & 3 & 3 & & \\ \hline
     \end{tabular}
 \end{center}
 \begin{center}
     \begin{tabular}{| l | l |}
     \hline
     Fold & Weights \\ \hline
-    1 & 51.6240,   -5.6394,   -0.9195,  117.3091,
-         -31.5193,   -1.9346,   -2.8364 \\ \hline
-    2 & 61.5754,  119.5093,  -43.5034,   -0.3571,
-          -5.0867 \\ \hline
-    3 & 23.7598,  -38.3909,  -44.6193,   71.8402,
-          79.5440,  -36.2471,   -7.3942,  119.6915,
-         -31.7799,    0.9384,   -2.675 \\ \hline
-    4 & 56.9424,  -22.7079, -108.6892,   37.0749,
-         112.6876,  -13.6251,  -10.9835,  118.9107,
-         -32.4987,   -1.3683,   -2.5827 \\ \hline
-    5 & 35.4915,    0.8967,    2.4318,  111.0603,
-         -29.3260,   -1.0296,   -2.9383 \\ \hline
+    1 & 54.8,    0.8,   -3.8,  120.5,
+         -31.5,   -2.1,   -2.7 \\ \hline
+    2 & 52.7,    5.9,   -1.5,  114.6,
+         -32.1,   -1.2,   -2.4 \\ \hline
+    3 & 51.1,   -1.0 ,   -1.4,  119.5,
+         -31.0,   -1.1,   -2.7 \\ \hline
+    4 & 52.9,   -5.0,   -3.8,  123.2,
+         -30.3,   -1.2,   -2.9 \\ \hline
+    5 & 54.2,   -5.8,   -3.0,  125.3,
+         -31.3,   -1.6,   -3.2 \\ \hline
     \end{tabular}
 \end{center}
 \subsection*{F)}
 \includegraphics[width=250pt, keepaspectratio=true]{error.png}
 \includegraphics[width=250pt, keepaspectratio=true]{weights.png}
+The graph on the left shows the impact of $\lambda$ on the mean squared error while
+the graph on the right shows the impact of $\lambda$ on the weights associated to
+the features being used.\\
 
+These graphs show that as $\lambda$ increases it puts a greater pressure on the
+features, decreasing their significance while increasing error. It also shows that
+there are 5 features that are more predictive then the rest. We can conclude this
+because the 4 features that quickly approach zero as $\lambda$ is increased.\\
+
+Lastly we can see from the graph on the left that the optimum $\lambda$ will be
+approximately between 5 and 6.
 \section*{Question 2}
 When simplifying the maximum likelihood equation for a regression whose variables
 maintain a constant normal distribution we are able to obtain the sum-squared-error
@@ -244,32 +253,32 @@ GradientDescent.
  \KwData{a dataset containing features and targets, learning rate, lambda, delta}
  \KwResult{a weight vector }
 
- initialize weights to 1 or a random numbers\;
+ initialize weights to 1 or random numbers\;
 
  \While{max iterations not achieved}{
    initialize gradient = 0\;
   \While{not at the last row of the data array}{
 
     hypothesis = dot product (weights , row of features)\;
-
-    \eIf{$| y_i - w^Tx_i | \leq delta$}{
+    regularizor = lambda/2 * dot product(transpose of weights, weights)\;
+    \eIf{$| hypothesis | \leq delta$}{
 
       loss = hypothesis - row of targets\;
       J = dot product ( transpose of the row features, loss )\;
-      gradient += J + lambda/2 * dot product(transpose of weights, weights)\;
+      gradient += J + regularizor\;
 
      }{
      loss = hypothesis - row of targets\;
      \eIf{loss is negative}{
-       gradient += delta * row of features
+       gradient += delta * row of features + regularizor\;
      }{
-       gradient -= delta * row of features
+       gradient -= delta * row of features + regularizor\;
      }
     }
 
     go to the next row\;
   }
-  \If{gradient * learning rate is smaller then desired precision}{
+  \If{gradient * learning rate $\leq$ desired precision}{
     return weights\;
   }
 
