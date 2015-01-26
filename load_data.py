@@ -1,15 +1,14 @@
 __author__ = 'geoffrey'
 
 import numpy
-from math import sqrt
 import matplotlib.pyplot as plt
-from sklearn.preprocessing import PolynomialFeatures
-from sklearn.linear_model import LinearRegression
-from sklearn.pipeline import Pipeline
+from math import sqrt
+from sklearn.utils import shuffle
+
 
 def LinearRegression(feature_array, target_array):
 
-    #perform the linear regression
+    # perform the linear regression
     feature_array_transposed = feature_array.transpose()
 
     dot_product = numpy.dot(feature_array_transposed, feature_array)
@@ -18,9 +17,7 @@ def LinearRegression(feature_array, target_array):
 
     dot_product = numpy.dot(feature_array_transposed, target_array)
 
-    weights = numpy.dot(inverse, dot_product)
-
-    return weights
+    return numpy.dot(inverse, dot_product)
 
 def LinearRegressionWithL2Regularization(feature_array, target_array, lamb):
 
@@ -28,33 +25,15 @@ def LinearRegressionWithL2Regularization(feature_array, target_array, lamb):
 
     dot_product = numpy.dot(feature_array_transposed, feature_array)
 
-
     identity = numpy.identity(feature_array.shape[1], dtype=float)
 
     lamb_result = numpy.dot(lamb, identity)
 
-
     inverse = numpy.linalg.inv(dot_product + lamb_result)
-
 
     right_part = numpy.dot(feature_array_transposed, target_array)
 
-
     return numpy.dot(inverse, right_part)
-
-# def FeatureNormalization(feature_array, target_array):
-#
-#     array_shape = feature_array.shape
-#
-#     weights = numpy.zeros((2, array_shape[1]))
-#
-#     weights[0] = LinearRegression(feature_array, target_array)
-#
-#     normalized_feature_array = BuildNormalizedArray(feature_array)
-#
-#     weights[1] = LinearRegression(normalized_feature_array, target_array)
-#
-#     return weights
 
 def BuildNormalizedArray(original_array):
 
@@ -87,9 +66,9 @@ def PolyRegress(original_array, degree):
 
         polynomial_array = numpy.append(polynomial_array, degree_array, axis=1)
 
-    #add a noise column of ones to the feature matrix
-    array_ones = numpy.ones((polynomial_array[:, 0].size, 1))
-    polynomial_array = numpy.append(polynomial_array, array_ones, axis=1)
+    # add a noise column of ones to the feature matrix
+    array_noise = numpy.ones((polynomial_array[:, 0].size, 1))
+    polynomial_array = numpy.append(polynomial_array, array_noise, axis=1)
 
     return polynomial_array
 
@@ -108,76 +87,99 @@ def CalculateError(feature_array, target_array, weights):
 
     return error / target_array.shape[0]
 
-def FixingFiveFold():
-    return 0
-
-def FiveFoldCrossValidation(feature_array, target_array, lamb = None):
+def FiveFoldCrossValidation(feature_array, target_array, degree = None, lamb = None):
 
     complete_array = numpy.append(feature_array, target_array[:, numpy.newaxis], axis=1)
 
+    print complete_array
+
+    complete_array = shuffle(complete_array, random_state=5)
+
+    print complete_array
+
     five_folds = numpy.array_split(complete_array, 5)
 
-    training_errors = {}
-    testing_errors = {}
-    all_weights = {}
+    returned_statistics = {}
 
-    #go through the 5 training cases
+    # go through the 5 training cases
     for i in range(0, 5):
 
         training_data = numpy.empty((0, complete_array.shape[1]), dtype=float)
+        validation_data = numpy.empty((0, complete_array.shape[1]), dtype=float)
+        testing_data = numpy.empty((0, complete_array.shape[1]), dtype=float)
 
-        #concatenate the 4 folds that are being used for training
         for j in range(0, 5):
-            if i != j:
+            if j == i:
+                testing_data = numpy.append(testing_data, five_folds[j], axis=0)
+            elif j == (i+1) % 5:
+                validation_data = numpy.append(validation_data, five_folds[j], axis=0)
+            else:
                 training_data = numpy.append(training_data, five_folds[j], axis=0)
 
-                training_features = training_data[:, 0:training_data.shape[1]-1]
-                training_target = training_data[:, training_data.shape[1]-1]
+        # split the training data into features and targets
+        training_features = training_data[:, 0:training_data.shape[1]-1]
+        training_target = training_data[:, training_data.shape[1]-1]
 
+        # split the validation data into features and targets
+        validation_features = validation_data[:, 0:validation_data.shape[1]-1]
+        validation_target = validation_data[:, validation_data.shape[1]-1]
 
-        if lamb==None:
-            weights = LinearRegression(training_features, training_target[:, numpy.newaxis])
+        # split the testing data into features and targets
+        testing_features = testing_data[:, 0:testing_data.shape[1]-1]
+        testing_target = testing_data[:, testing_data.shape[1]-1]
+
+        validation_errors = {}
+        hypothesis_weights = {}
+
+        # find the hypothesis class with the lowest error
+        if degree is None:
+            start = 0
+            end = 5
         else:
-            weights = LinearRegressionWithL2Regularization(training_features, training_target[:, numpy.newaxis], lamb)
+            start = degree
+            end = degree+1
 
-        training_error = CalculateError(training_features, training_target, weights.transpose())
+        for d in range(start, end):
 
-        testing_features = five_folds[i][:, 0:five_folds[i].shape[1]-1]
-        testing_target = five_folds[i][:, five_folds[i].shape[1]-1]
+            poly_training_features = BuildNormalizedArray(PolyRegress(training_features, d+1))
+            poly_validation_features = BuildNormalizedArray(PolyRegress(validation_features, d+1))
+            poly_testing_features = BuildNormalizedArray(PolyRegress(testing_features, d+1))
 
-        testing_error = CalculateError(testing_features, testing_target, weights.transpose())
-
-        training_errors[i+1] = training_error
-        testing_errors[i+1] = testing_error
-        all_weights[i+1] = weights.transpose()
-
-        print 'Fold #%s results are:' % (i+1)
-
-        print 'Training error is : %s ' % training_error
-        print 'Testing error is : %s' % testing_error
+            # perform regression using the training set
+            if lamb is None:
+                weights = LinearRegression(poly_training_features, training_target[:, numpy.newaxis])
+            else:
+                weights = LinearRegressionWithL2Regularization(poly_training_features, training_target[:, numpy.newaxis], lamb)
 
 
-    key = min(testing_errors, key=testing_errors.get)
+            validation_errors[d] = CalculateError(poly_validation_features, validation_target, weights.transpose())
 
-    print 'Optimal run is: %s' % key
-    print 'Optimal weight vector is: %s' % (all_weights[key])
-
-    training_list = []
-    testing_list = []
-
-    for key in training_errors.keys():
-        training_list.append(training_errors[key])
-        testing_list.append(testing_errors[key])
+            hypothesis_weights[d] = weights.transpose()
 
 
-    result = {'train_avg': mean(training_list),
-              'train_std': stddev(training_list),
-              'test_avg': mean(testing_list),
-              'test_std': stddev(testing_list),
-              'weights': all_weights[key]}
+        min_key = min(validation_errors, key=validation_errors.get)
 
-    return result
+        optimal_degree = min_key + 1
+        optimal_weights = hypothesis_weights[min_key]
 
+        poly_training_features = BuildNormalizedArray(PolyRegress(training_features, optimal_degree))
+        poly_validation_features = BuildNormalizedArray(PolyRegress(validation_features, optimal_degree))
+        poly_testing_features = BuildNormalizedArray(PolyRegress(testing_features, optimal_degree))
+
+        training_error = CalculateError(numpy.append(poly_training_features, poly_validation_features, axis=0),
+                                        numpy.append(training_target, validation_target, axis=0),
+                                        optimal_weights)
+
+        testing_error = CalculateError(poly_testing_features, testing_target, optimal_weights)
+
+        fold_data = {'optimal_degree': optimal_degree,
+                     'training_error': training_error,
+                     'testing_error': testing_error,
+                     'optimal_weights': optimal_weights}
+
+        returned_statistics[i] = fold_data
+
+    return returned_statistics
 
 def GradientDescent(feature_array, target_array, max_iterations, alpha, delta, lamb):
 
@@ -231,129 +233,64 @@ def stddev(lst):
 if __name__ == '__main__':
 
     #############
-    #question 1 a
+    # question 1 a
     #############
-    print "QUESTION 1 A"
     array_x = numpy.loadtxt('hw1x.dat', float)
     vector_y = numpy.loadtxt('hw1y.dat', float)
 
-    #add a noise column of ones to the feature matrix
+    # add a noise column of ones to the feature matrix
     array_ones = numpy.ones((array_x[:, 0].size, 1))
     array_x = numpy.append(array_x, array_ones, axis=1)
 
-    #############
-    #question 1 b
-    #############
-    print
-    print
-    print "QUESTION 1 B"
-    array_x_norm  = BuildNormalizedArray(array_x)
-
-    array_x_d2 = PolyRegress(array_x, 2)
-    array_x_d2_norm = BuildNormalizedArray(array_x_d2)
-
-    array_x_d3 = PolyRegress(array_x, 3)
-    array_x_d3_norm = BuildNormalizedArray(array_x_d3)
-
-    array_x_d4 = PolyRegress(array_x, 4)
-    array_x_d4_norm = BuildNormalizedArray(array_x_d4)
-
-    array_x_d5 = PolyRegress(array_x, 5)
-    array_x_d5_norm = BuildNormalizedArray(array_x_d5)
-
-    print LinearRegression(array_x, vector_y)
-    print LinearRegression(array_x_norm, vector_y)
-
-    print LinearRegression(array_x_d2, vector_y)
-    print LinearRegression(array_x_d2_norm, vector_y)
-
-    print LinearRegression(array_x_d3, vector_y)
-    print LinearRegression(array_x_d3_norm, vector_y)
-
-    print LinearRegression(array_x_d4, vector_y)
-    print LinearRegression(array_x_d4_norm, vector_y)
-
-    print LinearRegression(array_x_d5, vector_y)
-    print LinearRegression(array_x_d5_norm, vector_y)
 
     #############
-    #question 1 d
-    #############
-    print
-    print
-    print "QUESTION 1 D"
-    FiveFoldCrossValidation(array_x, vector_y)
-
-    #############
-    #question 1 e
+    # question 1 e
     #############
     print
     print
     print "QUESTION 1 E"
+    stats = FiveFoldCrossValidation(array_x, vector_y)
 
-    stats = {}
-
-    for d in range(0, 5):
-        print
-        print 'Running regression on polynomials of degree : %s' % str(d+1)
-        poly_array = PolyRegress(array_x, d+1)
-        poly_norm = BuildNormalizedArray(poly_array)
-
-        stats[d] = FiveFoldCrossValidation(poly_array, vector_y)
-
-    print
-    print
-
-    print 'degree   terror  tstd    verror  vstd'
     for key in stats.keys():
-        print '%s   %9.5f  %9.5f  %9.5f  %9.5f  ' % (key+1,
-                                         stats[key]['train_avg'],
-                                         stats[key]['train_std'],
-                                         stats[key]['test_avg'],
-                                         stats[key]['test_std'])
+        print stats[key]
+
 
     #############
-    #question 1 f
+    # question 1 f
     #############
     print
     print
     print "QUESTION 1 F"
 
-    terror = []
-    verror = []
+    train_error = []
+    test_error = []
     lambdas = []
     weights = []
 
     for i in numpy.arange(1, 500, 1):
 
-        print i
-        errors = FiveFoldCrossValidation(array_x_d4_norm, vector_y, i)
+        errors = FiveFoldCrossValidation(array_x, vector_y, 4, i)
         lambdas.append(i)
-        terror.append(errors['train_avg'])
-        verror.append(errors['test_avg'])
-        weights.append(errors['weights'])
+        train_error.append(errors[0]['training_error'])
+        test_error.append(errors[0]['testing_error'])
+        weights.append(errors[0]['optimal_weights'])
 
-
-    print errors
-
-    print lambdas
-    print terror
-    print verror
 
     one_over_lambdas = [float(1.0/l) for l in lambdas]
 
-    print one_over_lambdas
+    line_train = plt.plot(one_over_lambdas, train_error, label="Training Error")
+    line_test = plt.plot(one_over_lambdas, test_error, label="Testing Error")
 
-    plt.plot(one_over_lambdas, terror)
-    plt.plot(one_over_lambdas, verror)
-
+    plt.legend(loc=0, borderaxespad=0.)
     plt.ylabel('mean squared error')
     plt.xlabel('1/$\lambda$')
 
     plt.show()
+
     for degree in range(0, weights[0].shape[0]):
         weight_list = []
         for element in weights:
+
             weight_list.append(element[degree])
 
         plt.plot(lambdas, weight_list)
@@ -365,7 +302,7 @@ if __name__ == '__main__':
     plt.show()
 
     #############
-    #question 2 c
+    # question 2 c
     #############
     print "QUESTION 2 C"
 

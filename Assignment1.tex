@@ -93,21 +93,33 @@ vector by some scalar.
 See source code.
 \subsection*{D)}
 \subsection*{E)}
-Fold \#1 results are:\\
-Training error is : [ 17633.45681241]\\
-Testing error is : [ 4795.16430455]\\
-Fold \#2 results are:\\
-Training error is : [ 16317.25933808]\\
-Testing error is : [ 6362.29874466]\\
-Fold \#3 results are:\\
-Training error is : [ 15395.564805]\\
-Testing error is : [ 7339.05242593]\\
-Fold \#4 results are:\\
-Training error is : [ 18457.0083633]\\
-Testing error is : [ 3879.4511839]\\
-Fold \#5 results are:\\
-Training error is : [ 20136.42642011]\\
-Testing error is : [ 2188.4234707]\\
+\begin{center}
+    \begin{tabular}{| l | l | l | l | l | l | l | l |}
+    \hline
+    Fold & 1 & 2 & 3 & 4 & 5 & Avg & Std \\ \hline
+    Training Error & 6.6514 & 19.2372 & 64.0957 & 3.5362 & 7.9715 & &  \\ \hline
+    Testing Error & 12.0617 & 65.2324 & 63.7457 & 242.0755 & 27.4566 & &  \\ \hline
+    Best Hypothesis Class & 3 & 2 & 5 & 5 & 3 & & \\ \hline
+    \end{tabular}
+\end{center}
+\begin{center}
+    \begin{tabular}{| l | l |}
+    \hline
+    Fold & Weights \\ \hline
+    1 & 51.6240,   -5.6394,   -0.9195,  117.3091,
+         -31.5193,   -1.9346,   -2.8364 \\ \hline
+    2 & 61.5754,  119.5093,  -43.5034,   -0.3571,
+          -5.0867 \\ \hline
+    3 & 23.7598,  -38.3909,  -44.6193,   71.8402,
+          79.5440,  -36.2471,   -7.3942,  119.6915,
+         -31.7799,    0.9384,   -2.675 \\ \hline
+    4 & 56.9424,  -22.7079, -108.6892,   37.0749,
+         112.6876,  -13.6251,  -10.9835,  118.9107,
+         -32.4987,   -1.3683,   -2.5827 \\ \hline
+    5 & 35.4915,    0.8967,    2.4318,  111.0603,
+         -29.3260,   -1.0296,   -2.9383 \\ \hline
+    \end{tabular}
+\end{center}
 \subsection*{F)}
 \includegraphics[width=250pt, keepaspectratio=true]{error.png}
 \includegraphics[width=250pt, keepaspectratio=true]{weights.png}
@@ -196,7 +208,7 @@ Find the derivative:
 
   \end{array} \right.\end{equation}
   \\
-  
+
 The equation $| y_i - w^Tx_i |$ is equivalent to $\sqrt{( y_i - w^Tx_i )^2}$ as such
 the derivative becomes:
 
