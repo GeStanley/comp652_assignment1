@@ -84,8 +84,7 @@ def CalculateError(feature_array, target_array, weights):
 
         error += (estimate - target) ** 2
 
-
-    return error / target_array.shape[0]
+    return float(error/target_array.shape[0])
 
 def FiveFoldCrossValidation(feature_array, target_array, function='linear', degree=None, delta=None, lamb=None):
 
@@ -185,6 +184,24 @@ def FiveFoldCrossValidation(feature_array, target_array, function='linear', degr
         returned_statistics[i] = fold_data
 
     return returned_statistics
+
+def SquaredLossFunction(x, y, w):
+
+    loss = (y - numpy.dot(w, x.transpose()))
+
+    weighted = x * loss
+
+    return -1 * weighted
+
+def AbsoluteValueFunction(x, y, w, delta):
+    loss = (y - numpy.dot(w, x.transpose()))
+
+    weighted = x * loss
+
+    if abs(loss) <= delta:
+        return -1 * weighted
+    else:
+        return weighted
 
 def GradientDescent(feature_array, target_array, max_iterations, delta, alpha=0.01):
 

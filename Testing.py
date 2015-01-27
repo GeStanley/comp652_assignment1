@@ -98,7 +98,7 @@ class TestAssignment1(unittest.TestCase):
 
         error = load_data.CalculateError(features, targets, weights)
 
-        expected_error = 4
+        expected_error = 4.0
 
         self.assertEqual(error, expected_error)
 
@@ -108,9 +108,43 @@ class TestAssignment1(unittest.TestCase):
 
         error = load_data.CalculateError(features, targets, weights)
 
-        expected_error = 8
+        expected_error = 4.0
 
         self.assertEqual(error, expected_error)
+
+    def test_squared_loss_function(self):
+
+        x= numpy.array([[1, 2, 3]])
+        y= numpy.array([[5]])
+        weights = numpy.array([[1, 2, 1]])
+
+        gradient = load_data.SquaredLossFunction(x, y, weights)
+
+        expected_gradient = numpy.array([[3, 6, 9]])
+
+        self.assertTrue(numpy.allclose(gradient, expected_gradient, rtol=1e-01, atol=1e-01))
+
+    def test_absolute_loss_function(self):
+        x= numpy.array([[1, 2, 3]])
+        y= numpy.array([[5]])
+        weights = numpy.array([[1, 2, 1]])
+
+        gradient = load_data.AbsoluteValueFunction(x, y, weights, 1)
+
+        expected_gradient = numpy.array([[-3, -6, -9]])
+
+        self.assertTrue(numpy.allclose(gradient, expected_gradient, rtol=1e-01, atol=1e-01))
+
+        x= numpy.array([[1, 2, 3]])
+        y= numpy.array([[5]])
+        weights = numpy.array([[1, 2, 1]])
+
+        gradient = load_data.AbsoluteValueFunction(x, y, weights, 10)
+
+        expected_gradient = numpy.array([[3, 6, 9]])
+
+        self.assertTrue(numpy.allclose(gradient, expected_gradient, rtol=1e-01, atol=1e-01))
+
 
 suite = unittest.TestLoader().loadTestsFromTestCase(TestAssignment1)
 unittest.TextTestRunner(verbosity=2).run(suite)
